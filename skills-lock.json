@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "skills": {
+    "cpo": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/cpo/SKILL.md",
+      "computedHash": "9174a29e8731b526fe815e1efdee78160896d4669c9e11d80fdeaaf06928b7d7"
+    },
+    "cto": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/cto/SKILL.md",
+      "computedHash": "67c6f47b803dbd472137863a54805f32af2c2de9fc2cb26b6ff7d64771eafffd"
+    },
+    "grill": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/grill/SKILL.md",
+      "computedHash": "de5de84af91ca9629f962e3c1fc7b07f0cc0f93006492942d1e910f98c9c278c"
+    },
+    "ideation-engine": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ideation-engine/SKILL.md",
+      "computedHash": "65f7c59b15ffb29d64c903b50a132960b1051d26292a8eae4cd32017526cd2ee"
+    },
+    "insight-engine": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/insight-engine/SKILL.md",
+      "computedHash": "ed162c89042d5582278b161aaa9ea88deca24bf323fd2dd2266502bc3345351a"
+    },
+    "market-research": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/market-research/SKILL.md",
+      "computedHash": "05ea28bd5985885fbefeb6c2116e3d25d387fd6dbcb49de6cd5607cd2191f52e"
+    },
+    "prd": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/prd/SKILL.md",
+      "computedHash": "20d2bd186e707be6c572df7dfbb547bda2149f898186c48d5c3e03ab68225433"
+    },
+    "product-builder-resolver": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/product-builder-resolver/SKILL.md",
+      "computedHash": "98e8d3313355aa7c6a74293174c08f2041e12e0f5c7aded856ed6668ecee9a40"
+    },
+    "product-metrics": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/product-metrics/SKILL.md",
+      "computedHash": "2fef90f2177a8427e4f12f0f2ada4c3deace651f831e282a3c6237ef009b54e0"
+    },
+    "product-strategy": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/product-strategy/SKILL.md",
+      "computedHash": "ec78f7962acece811c4192134271ac885f41562c52671e5c988b56262175a985"
+    },
+    "synthetic-users": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/synthetic-users/SKILL.md",
+      "computedHash": "894b2ecc64bd49762984f8b830db439e5b2da44bf06776c3e759a7c9fb756533"
+    },
+    "ux-research": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ux-research/SKILL.md",
+      "computedHash": "f2d133d973daa8ba2d26b14ccbaa40daaa691d0791e523cf3b8b5d19c5f297ac"
+    },
+    "visual-designer": {
+      "source": "pedroromeroluna/ai-first-product-skills",
+      "sourceType": "github",
+      "skillPath": "skills/visual-designer/SKILL.md",
+      "computedHash": "b63e6340f557f5665f42540c7d974f171bfdd30e6bc80a1722492592fccb1219"
+    }
+  }
+}
