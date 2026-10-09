@@ -22,4 +22,4 @@ Un nivel de pádel confiable y portable, validado entre rivales, para que pareja
 
 **Completo con reservas.** Alcanza para avanzar con la landing y con la parte técnica del desafío. Quedan abiertas las preguntas de la tabla, en especial la evidencia de la pareja inferior y las reglas de WhatsApp para el bot.
 
-Arquitectura técnica, base de datos y stack: pendientes, con el skill de CTO.
+Arquitectura técnica, base de datos y stack: [arquitectura del MVP](../research/2026-10-08-arquitectura-mvp.md), definida con el skill de CTO el 2026-10-08. Los leads se guardan en una Google Sheet vía Apps Script; la landing se aloja en GitHub Pages; costo cero.

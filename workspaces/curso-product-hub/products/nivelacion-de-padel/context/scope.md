@@ -6,7 +6,7 @@ updated: 2026-10-08
 
 Marcas: 📌 dicho por Emilia o con fuente · 🔍 inferencia · ❓ pendiente.
 
-**Qué entra en la primera versión:** la landing con captura de leads (nombre, email, WhatsApp, categoría declarada) y el grupo de validación manual.
+**Qué entra en la primera versión:** la landing con captura de leads (nombre, email, WhatsApp, categoría declarada, partidos desparejos del último mes, fuente y consentimiento) y el grupo de validación manual. Para el curso se construye solo la landing; el bot queda para si el negocio sigue, siempre con costo cero o muy bajo.
 
 **Zona:** 📌 La Plata, empezando por algunos clubes.
 

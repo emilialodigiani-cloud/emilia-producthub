@@ -1,1 +1,2 @@
 - 2026-10-08 · [Camino del MVP: landing, grupo de validación, bot de WhatsApp](decisions/2026-10-08-camino-mvp.md)
+- 2026-10-08 · [Los leads de la landing se guardan en una Google Sheet, vía Google Apps Script](decisions/2026-10-08-leads-en-google-sheet.md)
