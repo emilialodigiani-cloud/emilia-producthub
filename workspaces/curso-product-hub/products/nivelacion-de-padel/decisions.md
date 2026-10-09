@@ -1,0 +1,1 @@
+- 2026-10-08 · [Camino del MVP: landing, grupo de validación, bot de WhatsApp](decisions/2026-10-08-camino-mvp.md)
