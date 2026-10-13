@@ -1,0 +1,1 @@
+/root/.ai-first-os/core/CLAUDE.md
