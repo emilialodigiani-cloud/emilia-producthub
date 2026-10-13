@@ -1,8 +1,10 @@
 ---
-owner: Emilia
-updated: 2026-10-13
+owner: Emilia Lodigiani
+updated: 2026-10-08
 ---
 
-# nivelacion-de-padel
+# Nivelación de pádel
 
-App/bot para nivelar las categorías de jugadores de pádel, de modo que los partidos entre parejas que no se conocen sean parejos. Para parejas de octava a cuarta de La Plata que buscan rivales fuera de su grupo. La categoría hoy es autopercibida; el producto la contrasta con la confirmación de los rivales después del partido y el resultado.
+App para nivelar las categorías de jugadores de pádel, de modo que los partidos entre parejas que no se conocen sean parejos.
+
+Para: jugadores de pádel que tienen pareja pero no un grupo grande, y buscan jugar contra otras parejas; hoy se autoperciben en una categoría (por ejemplo, sexta) que no siempre es la real.
