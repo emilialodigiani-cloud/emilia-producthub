@@ -57,3 +57,4 @@ content: workspaces/*/learnings/*.md
 archive: workspaces/*/products/*/archive/*.md
 archive: workspaces/*/initiatives/*/archive/*.md
 archive: initiatives/*/archive/*.md
+content: workspaces/*/products/*/decisions/*.md
