@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reporte CX</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FAF9F5;color:#141413;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="max-width: 1200px; margin: 0 auto; padding: 32px 20px 64px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #5E5D59">Customer Experience · Marketplace</div>
+<h1 style="margin: 0; font-size: 34px; line-height: 1.15">Reporte CX {{periodLabel}}</h1>
+<div style="font-size: 15px; color: #5E5D59">Rango analizado: {{rangeLabel}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end">
+<div style="font-size: 13px; background: #FBE9DF; color: #8A3B1B; padding: 4px 10px; border-radius: 999px">Datos de ejemplo · reemplazar con el cálculo real</div>
+<div style="display: flex; gap: 4px; background: #EDEBE3; padding: 4px; border-radius: 10px">
+<button onClick="{{goKpi}}" style="{{tabKpiStyle}}">KPIs</button>
+<button onClick="{{goBase}}" style="{{tabBaseStyle}}">Transparencia de la base</button>
+</div>
+</div>
+</div>
+
+<sc-if value="{{showKpi}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 28px">
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<span style="font-size: 14px; color: #5E5D59">Vista:</span>
+<div style="display: flex; gap: 4px; background: #EDEBE3; padding: 4px; border-radius: 10px">
+<button onClick="{{goFull}}" style="{{modeFullStyle}}">Período completo</button>
+<button onClick="{{goMonth}}" style="{{modeMonthStyle}}">Mes a mes</button>
+</div>
+<span style="font-size: 13px; color: #8A3B1B">Mes en curso incompleto: se marca con * en la vista mes a mes.</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px">
+<sc-for list="{{context}}" as="c" hint-placeholder-count="4">
+<div style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 13px; color: #5E5D59">{{c.label}}</div>
+<div style="font-size: 30px; font-weight: 600">{{c.value}}</div>
+<div style="font-size: 12px; color: #5E5D59">{{c.note}}</div>
+</div>
+</sc-for>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Evolución semanal: órdenes vs casos</h2>
+<div style="font-size: 13px; color: #5E5D59">Órdenes creadas, casos transaccionales y casos consultivos por semana. Las órdenes van en el eje izquierdo y los casos en el derecho, para que las tres líneas se puedan comparar en forma. La última semana puede estar incompleta (*).</div>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 660 250" role="img" aria-label="Líneas semanales de órdenes creadas, casos transaccionales y casos consultivos" style="width: 100%; min-width: 520px; height: auto; display: block">
+<g stroke="#E5E2D8" stroke-width="1">
+<line x1="60" y1="30" x2="600" y2="30"/><line x1="60" y1="80" x2="600" y2="80"/><line x1="60" y1="130" x2="600" y2="130"/><line x1="60" y1="180" x2="600" y2="180"/>
+</g>
+<g font-size="11" fill="#5E5D59" text-anchor="end">
+<text x="52" y="34">[máx]</text><text x="52" y="184">0</text>
+</g>
+<g font-size="11" fill="#5E5D59" text-anchor="start">
+<text x="608" y="34">[máx]</text><text x="608" y="184">0</text>
+</g>
+<text x="52" y="16" font-size="11" fill="#5E5D59" text-anchor="end">Órdenes</text>
+<text x="608" y="16" font-size="11" fill="#5E5D59" text-anchor="start">Casos</text>
+<g font-size="11" fill="#5E5D59" text-anchor="middle">
+<text x="90" y="202">S1</text><text x="198" y="202">S2</text><text x="306" y="202">S3</text><text x="414" y="202">S4</text><text x="522" y="202">S5</text><text x="600" y="202">S6*</text>
+</g>
+<polyline points="90,70 198,58 306,52 414,64 522,48 600,44" fill="none" stroke="#5E5D59" stroke-width="2.5" stroke-dasharray="6 4"/>
+<polyline points="90,128 198,120 306,124 414,112 522,116 600,108" fill="none" stroke="#C2410C" stroke-width="2.5"/>
+<polyline points="90,152 198,148 306,154 414,146 522,150 600,144" fill="none" stroke="#2F6F8F" stroke-width="2.5"/>
+<g fill="#5E5D59"><circle cx="90" cy="70" r="3.5"/><circle cx="198" cy="58" r="3.5"/><circle cx="306" cy="52" r="3.5"/><circle cx="414" cy="64" r="3.5"/><circle cx="522" cy="48" r="3.5"/><circle cx="600" cy="44" r="3.5"/></g>
+<g fill="#C2410C"><circle cx="90" cy="128" r="3.5"/><circle cx="198" cy="120" r="3.5"/><circle cx="306" cy="124" r="3.5"/><circle cx="414" cy="112" r="3.5"/><circle cx="522" cy="116" r="3.5"/><circle cx="600" cy="108" r="3.5"/></g>
+<g fill="#2F6F8F"><circle cx="90" cy="152" r="3.5"/><circle cx="198" cy="148" r="3.5"/><circle cx="306" cy="154" r="3.5"/><circle cx="414" cy="146" r="3.5"/><circle cx="522" cy="150" r="3.5"/><circle cx="600" cy="144" r="3.5"/></g>
+</svg>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #5E5D59">
+<span><span style="display: inline-block; width: 18px; height: 0; border-top: 3px dashed #5E5D59; margin-right: 6px; vertical-align: middle"></span>Órdenes creadas (eje izq.)</span>
+<span><span style="display: inline-block; width: 18px; height: 3px; background: #C2410C; margin-right: 6px; vertical-align: middle"></span>Casos transaccionales (eje der.)</span>
+<span><span style="display: inline-block; width: 18px; height: 3px; background: #2F6F8F; margin-right: 6px; vertical-align: middle"></span>Casos consultivos (eje der.)</span>
+</div>
+</section>
+
+<sc-if value="{{showMonth}}" hint-placeholder-val="{{ false }}">
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Mes a mes</h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px">
+<thead><tr style="text-align: left; color: #5E5D59">
+<th style="padding: 8px 6px">Mes</th><th style="padding: 8px 6px">Órdenes</th><th style="padding: 8px 6px">Casos</th><th style="padding: 8px 6px">CR transaccional</th><th style="padding: 8px 6px">CR consultivo</th><th style="padding: 8px 6px">Recontacto 7d</th><th style="padding: 8px 6px">FCR</th><th style="padding: 8px 6px">Reclamos de envío fuera de 72 h</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{months}}" as="m" hint-placeholder-count="3">
+<tr style="border-top: 1px solid #E5E2D8">
+<td style="padding: 8px 6px; font-weight: 600">{{m.name}}</td><td style="padding: 8px 6px">{{m.orders}}</td><td style="padding: 8px 6px">{{m.cases}}</td><td style="padding: 8px 6px">{{m.crT}}</td><td style="padding: 8px 6px">{{m.crC}}</td><td style="padding: 8px 6px">{{m.rec}}</td><td style="padding: 8px 6px">{{m.fcr}}</td><td style="padding: 8px 6px">{{m.logi}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="font-size: 12px; color: #5E5D59">* Mes en curso: datos parciales, no comparable con meses cerrados.</div>
+</section>
+</sc-if>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 20px">1. Contact rate y motivos de contacto</h2>
+<div style="font-size: 13px; color: #5E5D59">Cada tipo de contact rate (transaccional y consultivo) se muestra separado por comprador y vendedor, y debajo sus motivos de contacto. La cantidad de clusters surge de los datos (los necesarios para ser representativos). Cada verbatim va sin datos personales y con su número de caso de Salesforce.</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px; background: #FAF9F5; border: 1px solid #E5E2D8; border-radius: 10px; padding: 16px">
+<div style="position: relative; width: 180px; height: 180px; flex: none">
+<div role="img" aria-label="Distribución de casos por tipo de contact rate" style="{{donutStyle}}"></div>
+<div style="position: absolute; top: 34px; left: 34px; width: 112px; height: 112px; border-radius: 50%; background: #FAF9F5; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<div style="font-size: 22px; font-weight: 600">[0.000]</div>
+<div style="font-size: 11px; color: #5E5D59">casos analizados</div>
+</div>
+</div>
+<div style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; color: #5E5D59">Foto rápida: cómo se reparten los casos entre los 4 tipos de contact rate, con su tasa al lado. El tamaño de cada porción es volumen de casos; la tasa se lee en el valor.</div>
+<sc-for list="{{crMix}}" as="x" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px">
+<span style="{{x.dot}}"></span>
+<span style="flex: 1; font-weight: 600">{{x.name}}</span>
+<span style="color: #5E5D59">{{x.cases}} · {{x.share}}</span>
+<span style="font-weight: 600; min-width: 70px; text-align: right">CR {{x.rate}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<sc-for list="{{crBlocks}}" as="blk" hint-placeholder-count="2">
+<div style="border: 1px solid #E5E2D8; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px; background: #FAF9F5">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h3 style="margin: 0; font-size: 17px">{{blk.title}}</h3>
+<div style="font-size: 12px; color: #5E5D59">{{blk.def}}</div>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 620px">
+<thead><tr style="text-align: left; color: #5E5D59">
+<th style="padding: 8px 6px">Segmento</th><th style="padding: 8px 6px">Contact rate</th><th style="padding: 8px 6px">Num. / Den.</th><th style="padding: 8px 6px">Consulta</th><th style="padding: 8px 6px">Solicitud</th><th style="padding: 8px 6px">Reclamo</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{blk.rows}}" as="r" hint-placeholder-count="2">
+<tr style="border-top: 1px solid #E5E2D8">
+<td style="padding: 8px 6px; font-weight: 600">{{r.seg}}</td><td style="padding: 8px 6px; font-weight: 600">{{r.rate}}</td><td style="padding: 8px 6px; color: #5E5D59">{{r.nd}}</td><td style="padding: 8px 6px">{{r.q}}</td><td style="padding: 8px 6px">{{r.s}}</td><td style="padding: 8px 6px">{{r.c}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px">
+<sc-for list="{{blk.groups}}" as="g" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h4 style="margin: 0; font-size: 15px">Motivos · {{g.title}}</h4>
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{it.name}}</span><span>{{it.n}} · {{it.pct}}</span></div>
+<div style="height: 8px; background: #EDEBE3; border-radius: 4px"><div style="{{it.bar}}"></div></div>
+<div style="font-size: 13px; color: #5E5D59; font-style: italic">{{it.quote}}</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px">
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">2. Canales de contacto</h2>
+<div style="font-size: 13px; color: #5E5D59">% de casos por canal, aperturado por tipo de registro (consulta, solicitud, reclamo). El largo de la barra es el peso del canal.</div>
+<sc-for list="{{channels}}" as="ch" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{ch.name}}</span><span>{{ch.pct}} · predomina {{ch.top}}</span></div>
+<div style="display: flex; width: {{ch.total}}%; height: 14px; border-radius: 5px; overflow: hidden; background: #EDEBE3">
+<div style="{{ch.segQ}}"></div><div style="{{ch.segS}}"></div><div style="{{ch.segC}}"></div>
+</div>
+<div style="font-size: 12px; color: #5E5D59">Consulta {{ch.q}} · Solicitud {{ch.s}} · Reclamo {{ch.c}}</div>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #5E5D59">
+<span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #2F6F8F; margin-right: 6px"></span>Consulta</span>
+<span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #D9A441; margin-right: 6px"></span>Solicitud</span>
+<span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #C2410C; margin-right: 6px"></span>Reclamo</span>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">3. Recontacto</h2>
+<div style="font-size: 13px; color: #5E5D59">Mismo contacto y motivo dentro de la ventana. Abajo, el cruce de motivo por tipo de registro de los casos que generan recontacto.</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px">
+<sc-for list="{{recontact}}" as="k" hint-placeholder-count="3">
+<div style="background: #FAF9F5; border: 1px solid #E5E2D8; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 12px; color: #5E5D59">{{k.label}}</div>
+<div style="font-size: 24px; font-weight: 600">{{k.value}}</div>
+<div style="font-size: 12px; color: #5E5D59">{{k.nd}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<h3 style="margin: 4px 0 0; font-size: 15px">Motivo x tipo de registro: casos recontactados y tasa de recontacto</h3>
+<div style="display: flex; gap: 4px; background: #EDEBE3; padding: 4px; border-radius: 10px">
+<button onClick="{{win3}}" style="{{win3Style}}">3 días</button>
+<button onClick="{{win7}}" style="{{win7Style}}">7 días</button>
+<button onClick="{{win14}}" style="{{win14Style}}">14 días</button>
+</div>
+</div>
+<div style="font-size: 12px; color: #5E5D59">Ventana: {{winLabel}}. Cada celda: casos recontactados · tasa = recontactados / casos de ese motivo y tipo. Más oscuro = tasa más alta.</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: separate; border-spacing: 4px; font-size: 13px; min-width: 520px">
+<thead><tr style="text-align: left; color: #5E5D59">
+<th style="padding: 6px">Motivo</th><th style="padding: 6px">Consulta</th><th style="padding: 6px">Solicitud</th><th style="padding: 6px">Reclamo</th><th style="padding: 6px">Total motivo</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{recMatrix}}" as="m" hint-placeholder-count="5">
+<tr>
+<td style="padding: 8px 6px; font-weight: 600">{{m.name}}</td>
+<td style="{{m.cQ}}">{{m.q}}</td><td style="{{m.cS}}">{{m.s}}</td><td style="{{m.cC}}">{{m.c}}</td>
+<td style="padding: 8px 6px; font-weight: 600">{{m.total}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+
+</div>
+
+
+
+<div style="display: flex; flex-direction: column; gap: 28px">
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">4. Cruce logístico: órdenes vs contactos por PDT</h2>
+<div style="font-size: 13px; color: #5E5D59">PDT = promise delivery time (72 h, 3 días hábiles desde la creación). Se compara, sobre el total de órdenes de cada grupo, cuántas generaron un reclamo de envío antes de vencer la promesa y cuántas después de vencida.</div>
+<sc-for list="{{pdt}}" as="g" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 6px; background: #FAF9F5; border: 1px solid #E5E2D8; border-radius: 10px; padding: 14px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-size: 14px"><span style="font-weight: 600">{{g.name}}</span><span>{{g.orders}} órdenes</span></div>
+<button onClick="{{g.toggle}}" title="{{g.hover}}" aria-expanded="{{g.open}}" style="display: flex; height: 22px; padding: 0; border: 0; border-radius: 6px; overflow: hidden; background: #DAD7CB; cursor: pointer; width: 100%">
+<span style="{{g.segContact}}"></span>
+</button>
+<div style="font-size: 12px; color: #5E5D59">Pasá el mouse o hacé click en la barra para ver los números de caso de los contactos.</div>
+<sc-if value="{{g.open}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 6px; background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 8px; padding: 10px">
+<sc-for list="{{g.caseList}}" as="cs" hint-placeholder-count="4">
+<span style="font-size: 12px; font-weight: 600; background: #F1EFE6; border-radius: 6px; padding: 3px 8px">{{cs.id}}</span>
+</sc-for>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-size: 13px"><span><b>{{g.contacts}}</b> con reclamo de envío {{g.when}}</span><span style="font-weight: 600">Contact rate {{g.rate}}</span></div>
+<div style="font-size: 12px; color: #5E5D59">{{g.read}}</div>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #5E5D59">
+<span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #C2410C; margin-right: 6px"></span>Órdenes con reclamo de envío</span>
+<span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #DAD7CB; margin-right: 6px"></span>Órdenes sin reclamo</span>
+</div>
+<div style="font-size: 14px; background: #F1EFE6; border-radius: 8px; padding: 10px 12px">Fuera de PDT el contact rate es <b>[0,0]x</b> el de dentro de PDT. Una brecha grande apunta a problema logístico; una brecha chica, a comunicación o producto.</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">5. Contactos por etapa de la orden</h2>
+<div style="font-size: 13px; color: #5E5D59">Etapa de la orden al momento del contacto transaccional. Primero el recorrido feliz (happy path) y después las órdenes que salieron de ese recorrido.</div>
+<sc-for list="{{stages}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{s.name}}</span><span>{{s.n}} · {{s.pct}} · {{s.per100}} c/100 órd.</span></div>
+<div style="height: 10px; background: #EDEBE3; border-radius: 5px"><div style="{{s.bar}}"></div></div>
+<div style="font-size: 12px; color: #5E5D59">Predomina {{s.top}} · motivo principal: {{s.reason}}</div>
+</div>
+</sc-for>
+<h3 style="margin: 8px 0 0; font-size: 15px">Fuera del happy path</h3>
+<sc-for list="{{stagesOff}}" as="s" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{s.name}}</span><span>{{s.n}} · {{s.pct}} · {{s.per100}} c/100 órd.</span></div>
+<div style="height: 10px; background: #EDEBE3; border-radius: 5px"><div style="{{s.bar}}"></div></div>
+<div style="font-size: 12px; color: #5E5D59">Predomina {{s.top}} · motivo principal: {{s.reason}}</div>
+</div>
+</sc-for>
+</section>
+
+</div>
+
+<section style="background: #F1EFE6; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 18px">Lectura y supuestos</h2>
+<div style="font-size: 14px; line-height: 1.5">[Lectura de 3 o 4 líneas: dónde está la mayor fricción y qué la mueve.]</div>
+<div style="font-size: 13px; color: #5E5D59; line-height: 1.5">Supuestos: recontacto a 7 días; FCR = sin recontacto en 7 días; promesa de 72 h = 3 días hábiles desde la creación; [feriados informados].</div>
+</section>
+
+</div>
+</sc-if>
+
+<sc-if value="{{showBase}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 28px">
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">De la base original a la base analizada</h2>
+<div style="font-size: 13px; color: #5E5D59">Cada caso descartado se cuenta una sola vez, en el primer motivo que aplica. Original = descartados + analizados.</div>
+<sc-for list="{{funnel}}" as="f" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{f.name}}</span><span>{{f.n}} · {{f.pct}}</span></div>
+<div style="height: 12px; background: #EDEBE3; border-radius: 6px"><div style="{{f.bar}}"></div></div>
+<div style="font-size: 12px; color: #5E5D59">{{f.note}}</div>
+</div>
+</sc-for>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px">
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Cómo se asoció cada caso a una orden</h2>
+<div style="font-size: 13px; color: #5E5D59">Prioridad: order ID, cédula, email, nombre.</div>
+<sc-for list="{{matching}}" as="m" hint-placeholder-count="5">
+<div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px solid #E5E2D8; padding-top: 8px"><span>{{m.name}}</span><span style="font-weight: 600">{{m.n}} · {{m.pct}}</span></div>
+</sc-for>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Palabras clave de limpieza usadas</h2>
+<div style="font-size: 13px; color: #5E5D59">Definidas para este período en el formulario de entrada.</div>
+<sc-for list="{{keywords}}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #E5E2D8; padding-top: 8px">
+<div style="font-size: 14px; font-weight: 600">{{k.name}}</div>
+<div style="font-size: 13px; color: #5E5D59">{{k.words}}</div>
+</div>
+</sc-for>
+</section>
+
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Casos descartados (solo IDs)</h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px">
+<thead><tr style="text-align: left; color: #5E5D59">
+<th style="padding: 8px 6px">Caso</th><th style="padding: 8px 6px">Fecha</th><th style="padding: 8px 6px">Motivo de descarte</th><th style="padding: 8px 6px">Palabra clave</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{discarded}}" as="d" hint-placeholder-count="3">
+<tr style="border-top: 1px solid #E5E2D8">
+<td style="padding: 8px 6px; font-weight: 600">{{d.id}}</td><td style="padding: 8px 6px">{{d.date}}</td><td style="padding: 8px 6px">{{d.reason}}</td><td style="padding: 8px 6px; color: #5E5D59">{{d.kw}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="font-size: 12px; color: #5E5D59">Sin nombres, cédulas, emails ni teléfonos. El listado completo se exporta aparte por motivo.</div>
+</section>
+
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":3200}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'kpi', mode: 'full', win: 7 };
+  }
+  renderVals() {
+    const tab = this.state.tab, mode = this.state.mode;
+    const on = 'border: 0; padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; background: #141413; color: #FAF9F5; cursor: pointer; min-height: 44px';
+    const off = 'border: 0; padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; background: transparent; color: #3D3D3A; cursor: pointer; min-height: 44px';
+    const bar = (pct, color) => 'height: 100%; border-radius: inherit; width: ' + pct + '%; background: ' + (color || '#C2410C');
+    const blue = '#2F6F8F';
+    return {
+      periodLabel: '[mensual / quincenal]',
+      rangeLabel: '[desde dd/mm/aaaa] a [hasta dd/mm/aaaa]',
+      showKpi: tab === 'kpi',
+      showBase: tab === 'base',
+      showMonth: mode === 'month',
+      goKpi: () => this.setState({ tab: 'kpi' }),
+      goBase: () => this.setState({ tab: 'base' }),
+      goFull: () => this.setState({ mode: 'full' }),
+      goMonth: () => this.setState({ mode: 'month' }),
+      tabKpiStyle: tab === 'kpi' ? on : off,
+      tabBaseStyle: tab === 'base' ? on : off,
+      modeFullStyle: mode === 'full' ? on : off,
+      modeMonthStyle: mode === 'month' ? on : off,
+      context: [
+        { label: 'Compradores activos', value: '[00.000]', note: 'Dato del formulario' },
+        { label: 'Vendedores activos', value: '[0.000]', note: 'Dato del formulario' },
+        { label: 'Órdenes del período', value: '[00.000]', note: 'Archivo de órdenes' },
+        { label: 'Casos analizados', value: '[0.000]', note: 'Después de la limpieza' }
+      ],
+      months: [
+        { name: 'Mes 1', orders: '[0000]', cases: '[000]', crT: '[0,0%]', crC: '[0,0%]', rec: '[0,0%]', fcr: '[00%]', logi: '[0,0%]' },
+        { name: 'Mes 2', orders: '[0000]', cases: '[000]', crT: '[0,0%]', crC: '[0,0%]', rec: '[0,0%]', fcr: '[00%]', logi: '[0,0%]' },
+        { name: 'Mes 3 *', orders: '[0000]', cases: '[000]', crT: '[0,0%]', crC: '[0,0%]', rec: '[0,0%]', fcr: '[00%]', logi: '[0,0%]' }
+      ],
+      channels: [
+        { name: 'Canal A', pct: '[00%]', top: '[reclamo]', total: 100, mix: [20, 25, 55] },
+        { name: 'Canal B', pct: '[00%]', top: '[consulta]', total: 65, mix: [60, 25, 15] },
+        { name: 'Canal C', pct: '[00%]', top: '[solicitud]', total: 35, mix: [30, 50, 20] },
+        { name: 'Canal D', pct: '[00%]', top: '[consulta]', total: 18, mix: [70, 20, 10] }
+      ].map((c) => ({
+        ...c,
+        q: '[00%]', s: '[00%]', c: '[00%]',
+        segQ: 'height: 100%; width: ' + c.mix[0] + '%; background: #2F6F8F',
+        segS: 'height: 100%; width: ' + c.mix[1] + '%; background: #D9A441',
+        segC: 'height: 100%; width: ' + c.mix[2] + '%; background: #C2410C'
+      })),
+      donutStyle: 'width: 180px; height: 180px; border-radius: 50%; background: conic-gradient(#C2410C 0 38%, #D9A441 38% 55%, #2F6F8F 55% 85%, #7BA7BC 85% 100%)',
+      crMix: [
+        { name: 'Transaccional · Compradores', color: '#C2410C' },
+        { name: 'Transaccional · Vendedores', color: '#D9A441' },
+        { name: 'Consultivo · Compradores', color: '#2F6F8F' },
+        { name: 'Consultivo · Vendedores', color: '#7BA7BC' }
+      ].map((x) => ({
+        name: x.name, cases: '[000]', share: '[00%]', rate: '[0,0%]',
+        dot: 'width: 12px; height: 12px; border-radius: 3px; background: ' + x.color
+      })),
+      win3: () => this.setState({ win: 3 }),
+      win7: () => this.setState({ win: 7 }),
+      win14: () => this.setState({ win: 14 }),
+      win3Style: this.state.win === 3 ? on : off,
+      win7Style: this.state.win === 7 ? on : off,
+      win14Style: this.state.win === 14 ? on : off,
+      winLabel: this.state.win + ' días',
+      recMatrix: [
+        { name: 'Seguimiento de pedido', t: [0.10, 0.18, 0.40] },
+        { name: 'Pedido de cancelación', t: [0.08, 0.30, 0.22] },
+        { name: 'Consulta por reembolso', t: [0.12, 0.26, 0.34] },
+        { name: 'Consultas del pago o cuotas', t: [0.14, 0.10, 0.18] },
+        { name: '[Otro motivo]', t: [0.06, 0.08, 0.12] }
+      ].map((m) => ({
+        name: m.name,
+        q: '[000] · [00%]', s: '[000] · [00%]', c: '[000] · [00%]', total: '[000] · [00%]',
+        cQ: 'padding: 8px 6px; border-radius: 6px; background: rgba(194, 65, 12, ' + m.t[0] + ')',
+        cS: 'padding: 8px 6px; border-radius: 6px; background: rgba(194, 65, 12, ' + m.t[1] + ')',
+        cC: 'padding: 8px 6px; border-radius: 6px; background: rgba(194, 65, 12, ' + m.t[2] + ')'
+      })),
+      recontact: [
+        { label: 'Recontacto 7 días', value: '[00%]', nd: '[num] / [den]' },
+        { label: 'Recontacto 3 días', value: '[00%]', nd: 'Sensibilidad' },
+        { label: 'Recontacto 14 días', value: '[00%]', nd: 'Sensibilidad' }
+      ],
+      crBlocks: [
+        { title: 'Contact rate transaccional', def: 'Poscompra: órdenes con contacto / órdenes creadas. Cruce por order ID, cédula, email o nombre.',
+          rows: [
+            { seg: 'Compradores', rate: '[0,0%]', nd: '[órdenes con contacto] / [órdenes]', q: '[00%]', s: '[00%]', c: '[00%]' },
+            { seg: 'Vendedores', rate: '[0,0%]', nd: '[órdenes con contacto] / [órdenes]', q: '[00%]', s: '[00%]', c: '[00%]' }
+          ],
+          groups: [
+            { title: 'Compradores', items: [
+            { name: 'Seguimiento de pedido', n: '[000]', pct: '[00%]', bar: bar(40), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: 'Pedido de cancelación', n: '[000]', pct: '[00%]', bar: bar(34), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: 'Consulta por reembolso', n: '[000]', pct: '[00%]', bar: bar(28), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: 'Consultas del pago o cuotas', n: '[000]', pct: '[00%]', bar: bar(22), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Otro cluster comprador]', n: '[000]', pct: '[00%]', bar: bar(16), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' }
+            ] },
+            { title: 'Vendedores', items: [
+            { name: '[Cluster vendedor 1]', n: '[000]', pct: '[00%]', bar: bar(40, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster vendedor 2]', n: '[000]', pct: '[00%]', bar: bar(34, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster vendedor 3]', n: '[000]', pct: '[00%]', bar: bar(28, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' }
+            ] }
+          ] },
+        { title: 'Contact rate consultivo', def: 'Casos consultivos / usuarios activos del segmento.',
+          rows: [
+            { seg: 'Compradores', rate: '[0,0%]', nd: '[casos] / [compradores activos]', q: '[00%]', s: '[00%]', c: '[00%]' },
+            { seg: 'Vendedores', rate: '[0,0%]', nd: '[casos] / [vendedores activos]', q: '[00%]', s: '[00%]', c: '[00%]' }
+          ],
+          groups: [
+            { title: 'Compradores', items: [
+            { name: '[Cluster consultivo comprador 1]', n: '[000]', pct: '[00%]', bar: bar(40), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster consultivo comprador 2]', n: '[000]', pct: '[00%]', bar: bar(34), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster consultivo comprador 3]', n: '[000]', pct: '[00%]', bar: bar(28), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' }
+            ] },
+            { title: 'Vendedores', items: [
+            { name: '[Cluster consultivo vendedor 1]', n: '[000]', pct: '[00%]', bar: bar(40, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster consultivo vendedor 2]', n: '[000]', pct: '[00%]', bar: bar(34, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' },
+            { name: '[Cluster consultivo vendedor 3]', n: '[000]', pct: '[00%]', bar: bar(28, blue), quote: '“[Verbatim representativo sin datos personales]” · Caso [Nº de caso Salesforce]' }
+            ] }
+          ] }
+      ],
+      pdt: [
+        { name: 'Contactos por órdenes dentro de PDT', orders: '[0.000]', contacts: '[000]', when: 'antes de vencer la promesa', rate: '[0,0%]', read: 'Expectativa o comunicación: el cliente consulta antes de que la promesa venza.', segContact: 'display: block; height: 100%; width: 12%; background: #C2410C' },
+        { name: 'Contactos por órdenes fuera de PDT', orders: '[0.000]', contacts: '[000]', when: 'después de vencida la promesa', rate: '[0,0%]', read: 'Logístico: la orden no llegó dentro de la promesa y el cliente reclama.', segContact: 'display: block; height: 100%; width: 38%; background: #C2410C' }
+      ].map((g, i) => ({
+        ...g,
+        open: !!this.state['pdt' + i],
+        toggle: () => this.setState({ ['pdt' + i]: !this.state['pdt' + i] }),
+        hover: 'Casos: [Nº de caso Salesforce 1], [Nº de caso 2], [Nº de caso 3] ...',
+        caseList: [{ id: '[Nº de caso]' }, { id: '[Nº de caso]' }, { id: '[Nº de caso]' }, { id: '[Nº de caso]' }, { id: '[Nº de caso]' }]
+      })),
+      stages: [
+        { name: 'Pagada', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[consulta]', reason: '[motivo]', bar: bar(12) },
+        { name: 'Preparando', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[solicitud]', reason: '[motivo]', bar: bar(22) },
+        { name: 'Lista para retirar', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[consulta]', reason: '[motivo]', bar: bar(14) },
+        { name: 'En tránsito', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(34) },
+        { name: 'Entregada', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(18) }
+      ],
+      stagesOff: [
+        { name: 'Cancelada', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[solicitud]', reason: '[motivo]', bar: bar(16, '#7A7770') },
+        { name: 'Devuelta al vendedor', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(8, '#7A7770') },
+        { name: '[Otro estado]', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[consulta]', reason: '[motivo]', bar: bar(4, '#7A7770') }
+      ],
+      funnel: [
+        { name: 'Casos originales', n: '[0.000]', pct: '100%', note: 'Export de Salesforce completo', bar: bar(100, '#7A7770') },
+        { name: 'Descartados: prueba o modo test', n: '[000]', pct: '[0%]', note: 'Primer motivo aplicado', bar: bar(6) },
+        { name: 'Descartados: otras empresas', n: '[000]', pct: '[0%]', note: 'Segundo motivo aplicado', bar: bar(4) },
+        { name: 'Descartados: campañas ajenas', n: '[000]', pct: '[0%]', note: 'Tercer motivo aplicado', bar: bar(8) },
+        { name: 'Casos para el análisis', n: '[0.000]', pct: '[00%]', note: 'Base de todas las métricas', bar: bar(82, blue) }
+      ],
+      matching: [
+        { name: 'Por order ID', n: '[000]', pct: '[00%]' },
+        { name: 'Por cédula', n: '[000]', pct: '[00%]' },
+        { name: 'Por email', n: '[000]', pct: '[00%]' },
+        { name: 'Por nombre del cliente', n: '[000]', pct: '[00%]' },
+        { name: 'Inferido como transaccional por el contenido del caso (sin order ID)', n: '[000]', pct: '[00%]' },
+        { name: 'Sin orden asociada (consultivo)', n: '[000]', pct: '[00%]' }
+      ],
+      keywords: [
+        { name: 'Prueba o modo test', words: '[palabra 1, palabra 2]' },
+        { name: 'Otras empresas', words: '[palabra 1, palabra 2]' },
+        { name: 'Campañas comerciales ajenas', words: '[palabra 1, palabra 2]' }
+      ],
+      discarded: [
+        { id: '[Nº de caso]', date: '[dd/mm]', reason: 'Prueba o modo test', kw: '[palabra]' },
+        { id: '[Nº de caso]', date: '[dd/mm]', reason: 'Otra empresa', kw: '[palabra]' },
+        { id: '[Nº de caso]', date: '[dd/mm]', reason: 'Campaña ajena', kw: '[palabra]' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
