@@ -81,6 +81,12 @@ tbody tr{border-top:1px solid var(--line)}
 .maxh{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:14px}
 .maxh th{position:sticky;top:0;background:var(--card)}
 .pdtbtn{display:flex;height:20px;padding:0;border:0;border-radius:999px;overflow:hidden;background:var(--track2);cursor:pointer;width:100%}
+.wkhit{fill:transparent;cursor:crosshair}
+.wkhit:hover{fill:var(--c-pri);fill-opacity:.09}
+#tip{position:fixed;z-index:50;pointer-events:none;display:none;background:var(--ink);color:var(--bg);padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.55;box-shadow:0 8px 24px rgba(17,17,45,.28);max-width:240px}
+#tip b{font-weight:600}
+#tip .k{display:flex;align-items:center;gap:8px;justify-content:space-between;gap:14px}
+#tip .k i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--mute)}
 @media (max-width:600px){.wrap{padding:20px 16px 48px}.hero{padding:24px;border-radius:22px}.card{padding:18px;border-radius:18px}}
 </style>
@@ -149,7 +155,10 @@ function weekly(){
  const mo=nice(Math.max(...w.orders)), mc=nice(Math.max(...w.tx,...w.cons));
  const x=i=>L+(Rr-L)*i/(n-1), yo=v=>B-(B-T)*v/mo, yc=v=>B-(B-T)*v/mc;
  const line=(arr,y)=>arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
- const dots=(arr,y,c)=>arr.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.2" fill="${c}"><title>Semana del ${w.labels[i]}${i===n-1?"*":""}: ${v}</title></circle>`).join("");
+ const wkText=i=>`Semana del ${w.labels[i]}${i===n-1?" (incompleta)":""}: ${num(w.orders[i])} órdenes · ${num(w.tx[i])} casos transaccionales · ${num(w.cons[i])} casos consultivos`;
+ const colW=(Rr-L)/(n-1);
+ const hits=w.labels.map((l,i)=>`<rect class="wkhit" data-wk="${i}" x="${(x(i)-colW/2).toFixed(1)}" y="${T}" width="${colW.toFixed(1)}" height="${B-T}"><title>${wkText(i)}</title></rect>`).join("");
+ const dots=(arr,y,c)=>arr.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.2" fill="${c}"><title>${wkText(i)}</title></circle>`).join("");
  let grid="";for(let k=0;k<=4;k++){const yy=B-(B-T)*k/4;grid+=`<line x1="${L}" y1="${yy}" x2="${Rr}" y2="${yy}" style="stroke:var(--line)"/><text x="${L-6}" y="${yy+4}" font-size="11" style="fill:var(--mute)" text-anchor="end">${Math.round(mo*k/4)}</text><text x="${Rr+6}" y="${yy+4}" font-size="11" style="fill:var(--mute)" text-anchor="start">${Math.round(mc*k/4)}</text>`}
  const xl=w.labels.map((l,i)=>`<text x="${x(i)}" y="${B+16}" font-size="10" style="fill:var(--mute)" text-anchor="middle" ${i%2?'opacity=".0"':''}>${l}${i===n-1?"*":""}</text>`).join("");
  const xl2=w.labels.map((l,i)=>i%2?`<text x="${x(i)}" y="${B+16}" font-size="10" style="fill:var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("");
@@ -165,7 +174,7 @@ function weekly(){
  <polyline points="${line(w.orders,yo)}" fill="none" style="stroke:var(--c-grey)" stroke-width="2.5" stroke-dasharray="6 4"/>
  <polyline points="${line(w.tx,yc)}" fill="none" style="stroke:var(--c-pri)" stroke-width="2.5"/>
  <polyline points="${line(w.cons,yc)}" fill="none" style="stroke:var(--c-sec)" stroke-width="2.5"/>
- ${dots(w.orders,yo,"var(--c-grey)")}${dots(w.tx,yc,"var(--c-pri)")}${dots(w.cons,yc,"var(--c-sec)")}
+ ${dots(w.orders,yo,"var(--c-grey)")}${dots(w.tx,yc,"var(--c-pri)")}${dots(w.cons,yc,"var(--c-sec)")}${hits}
  </svg></div>
  <div class="legend"><span><span style="display:inline-block;width:18px;border-top:3px dashed var(--c-grey);margin-right:6px;vertical-align:middle"></span>Órdenes creadas (eje izq.)</span><span><span style="display:inline-block;width:18px;height:3px;background:var(--c-pri);margin-right:6px;vertical-align:middle"></span>Casos transaccionales (eje der.)</span><span><span style="display:inline-block;width:18px;height:3px;background:var(--c-sec);margin-right:6px;vertical-align:middle"></span>Casos consultivos (eje der.)</span></div></section>`;
 }
@@ -350,9 +359,29 @@ function base(){
  <div class="small mute">Sin nombres, cédulas, emails ni teléfonos. ${num(X.discarded.length)} casos.</div></section></div>`;
 }
 function render(){
+ tip.style.display="none";
  document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():base());
 }
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("vb"))S.vb[d.dataset.k]=d.open;},true);
+const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","tooltip");document.body.appendChild(tip);
+function showTip(e){
+ const h=e.target.closest&&e.target.closest(".wkhit");
+ if(!h){tip.style.display="none";return;}
+ const w=X.weekly,i=+h.dataset.wk,last=i===w.labels.length-1;
+ tip.innerHTML=`<b>Semana del ${w.labels[i]}${last?" · incompleta":""}</b>
+ <div class="k"><span><i style="background:var(--c-grey)"></i>Órdenes</span><b>${num(w.orders[i])}</b></div>
+ <div class="k"><span><i style="background:var(--c-pri)"></i>Casos transaccionales</span><b>${num(w.tx[i])}</b></div>
+ <div class="k"><span><i style="background:var(--c-sec)"></i>Casos consultivos</span><b>${num(w.cons[i])}</b></div>`;
+ tip.style.display="block";
+ const r=tip.getBoundingClientRect();
+ let x=e.clientX+14,y=e.clientY-r.height-10;
+ if(x+r.width>window.innerWidth-8)x=e.clientX-r.width-14;
+ if(y<8)y=e.clientY+16;
+ tip.style.left=Math.max(8,x)+"px";tip.style.top=y+"px";
+}
+document.addEventListener("pointermove",showTip);
+document.addEventListener("pointerdown",showTip);
+document.addEventListener("pointerout",e=>{if(!e.relatedTarget)tip.style.display="none";});
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-act]");if(!b)return;
  const a=b.dataset.act,v=b.dataset.v,y=window.scrollY;
