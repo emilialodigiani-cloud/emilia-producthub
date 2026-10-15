@@ -43,7 +43,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 .mt{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
 .donutrow{display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px;align-items:center}
 .dt{font-variant-numeric:tabular-nums}
-.dt th,.dt td{padding:9px 10px;text-align:right}
+.dt th,.dt td{padding:11px 10px;text-align:right;vertical-align:top}
 .dt th:first-child,.dt td:first-child{text-align:left}
 .dt th{white-space:nowrap;font-size:13px}
 .dt tbody tr:first-child td{border-top:0}
@@ -215,13 +215,18 @@ function crBlock(r,kind){
 }
 function s1(r){
  let acc=0;const stops=r.donut.map((d,i)=>{const col=DCOL[i];const a0=acc;acc+=d.share*100;return `${col} ${a0.toFixed(2)}% ${acc.toFixed(2)}%`}).join(",");
- const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
+ const DESC=["Compras ya realizadas: casos con orden asociada o inferidos por el contenido. Tasa = órdenes con contacto / órdenes pagadas.",
+  "Casos de vendedores sobre una orden. Se informa volumen, no tasa.",
+  "Consultas sin compra asociada (cobertura, cuotas, cómo comprar). Tasa = casos / compradores registrados.",
+  "Prospectos y ex-vendedores de Hendyla (alta, migración) y operación del comercio. Se informa volumen, no tasa.",
+  "Casos de órdenes que expiraron sin pago (sección 7). Fuera del contact rate.",
+  "Spam, casos vacíos y clientes que abandonan: no se pueden atribuir a un comprador o vendedor. Fuera del contact rate."];
+ const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span><div class="small mute" style="margin-left:20px;max-width:46ch;font-weight:400;line-height:1.35">${DESC[i]||""}</div></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
  const sp=r.tx_split;
  const sin=r.sinid;
  return `<section class="card" style="gap:16px"><h2>2. Contact rate y motivos de contacto</h2>
  <div class="note">Cada tipo de contact rate (transaccional y consultivo) se muestra separado por comprador y vendedor y, debajo, sus motivos de contacto. La cantidad de clusters surge de los datos. Cada verbatim va sin datos personales y con su número de caso de Salesforce.</div>
  <div class="inner">
-  <div class="note">Cómo se reparten los casos entre los 4 tipos de contact rate (más intención de compra y un grupo sin segmento). Transaccional: órdenes con contacto / órdenes. Consultivo de compradores: casos / usuarios registrados. Vendedores: volumen, no tasa.</div>
   <div class="donutrow">
    <div style="position:relative;width:180px;height:180px;flex:none"><div role="img" aria-label="Distribución de casos por tipo de contact rate" style="width:180px;height:180px;border-radius:50%;background:conic-gradient(${stops})"></div>
     <div style="position:absolute;top:34px;left:34px;width:112px;height:112px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:22px;font-weight:600">${num(r.ctx.cases)}</div><div class="small mute">casos analizados</div></div></div>
