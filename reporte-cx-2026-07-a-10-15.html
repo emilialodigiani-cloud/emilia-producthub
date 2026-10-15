@@ -4,27 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reporte CX · Jul–Oct 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FAF9F5;--ink:#141413;--mute:#5E5D59;--card:#FFFFFF;--line:#E5E2D8;--soft:#F1EFE6;--track:#EDEBE3;--accent:#C2410C;--blue:#2F6F8F;--gold:#D9A441;--sky:#7BA7BC;--grey:#7A7770;--warn-bg:#FBE9DF;--warn:#8A3B1B}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1B1A17;--ink:#F3F1EA;--mute:#B5B2A8;--card:#25231F;--line:#3A3832;--soft:#2D2B26;--track:#38352F;--warn-bg:#3A2418;--warn:#F0B79A}}
+/* Umarket · manual de identidad: Iris 500 como color de marca, neutros como base, acentos solo para alertas, Inter */
+:root{--bg:#F6F6F8;--ink:#252529;--mute:#6C6C78;--card:#FFFFFF;--line:#E9E9EB;--soft:#EEEEFB;--track:#EEEEF0;--track2:#D8D8DE;--pri:#5555D9;--on-pri:#FFFFFF;--c-pri:#5555D9;--c-pri-l:#BBBBF1;--c-sec:#0499AD;--c-sec2:#39D8ED;--c-sec-l:#ABE9F1;--c-alert:#FF6600;--c-grey:#8F8F9C;--c-neu:#C6C6CC;--warn-bg:#FFF2D9;--warn:#664400;--hero-a:#222257;--hero-b:#11112D;--glow:#5555D9}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11112D;--ink:#F6F6F8;--mute:#BDBDC7;--card:#1B1B47;--line:#2E2E70;--soft:#222257;--track:#2A2A66;--track2:#44449B;--pri:#6666DD;--on-pri:#FFFFFF;--c-pri:#7777E2;--c-pri-l:#AAAAEE;--c-sec:#39D8ED;--c-sec2:#19CEE5;--c-sec-l:#74DFED;--c-alert:#FF6600;--c-grey:#9E9EAD;--c-neu:#505059;--warn-bg:#4D3300;--warn:#FFD485;--hero-a:#222257;--hero-b:#11112D;--glow:#5555D9}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.4}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 button{font-family:inherit}
-.wrap{max-width:1200px;margin:0 auto;padding:32px 16px 64px;display:flex;flex-direction:column;gap:28px}
-h1{margin:0;font-size:34px;line-height:1.15} h2{margin:0;font-size:20px} h3{margin:0;font-size:17px} h4{margin:0;font-size:15px}
-.eyebrow{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.wrap{max-width:1200px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:28px}
+h1{margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.04;font-weight:800;letter-spacing:-.025em;text-wrap:balance} h2{margin:0;font-size:21px;line-height:1.2;font-weight:600;letter-spacing:-.02em} h3{margin:0;font-size:17px;line-height:1.2;font-weight:600;letter-spacing:-.02em} h4{margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.ov{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px}
 .mute{color:var(--mute)} .small{font-size:12px} .note{font-size:13px;color:var(--mute)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
-.inner{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px}
-.seg{display:flex;gap:4px;background:var(--track);padding:4px;border-radius:10px;flex-wrap:wrap}
-.seg button{border:0;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;background:transparent;color:var(--ink);cursor:pointer;min-height:44px}
-.seg button.on{background:var(--ink);color:var(--bg);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.inner{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.seg{display:flex;gap:4px;background:var(--track);padding:4px;border-radius:999px;flex-wrap:wrap}
+.seg button{border:0;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:500;background:transparent;color:var(--ink);cursor:pointer;min-height:44px;transition:background .15s}
+.seg button:hover{background:rgba(85,85,217,.10)}
+.seg button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.seg button.on{background:var(--pri);color:var(--on-pri);font-weight:600}
+.hero{background:radial-gradient(110% 80% at 50% 135%,var(--glow) 0%,rgba(85,85,217,0) 64%),linear-gradient(180deg,var(--hero-a),var(--hero-b));border-radius:28px;padding:34px;color:#fff}
+.hero-in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:22px}
+.hero h1{color:#fff;margin:16px 0 10px}
+.hero .sub{color:rgba(255,255,255,.78);font-size:14px;max-width:60ch}
+.hero .seg{background:rgba(255,255,255,.12)}
+.hero .seg button{color:#fff}
+.hero .seg button:hover{background:rgba(255,255,255,.14)}
+.hero .seg button.on{background:#fff;color:#11112D}
 .grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:4px}
-.kpi .v{font-size:30px;font-weight:600}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:4px}
+.kpi .v{font-size:32px;font-weight:800;letter-spacing:-.025em;line-height:1.1}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
 .row{display:flex;justify-content:space-between;gap:10px;font-size:14px;flex-wrap:wrap}
-.bar{height:8px;background:var(--track);border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:inherit}
+.bar{height:8px;background:var(--track);border-radius:999px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:inherit}
 .bar.l{height:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 .mt{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
@@ -51,25 +64,25 @@ th{text-align:left;color:var(--mute);padding:8px 6px;font-weight:600;white-space
 td{padding:8px 6px}
 tbody tr{border-top:1px solid var(--line)}
 .scroll{overflow-x:auto}
-.pill{font-size:13px;background:var(--warn-bg);color:var(--warn);padding:4px 10px;border-radius:999px}
-.quote{font-size:13px;color:var(--mute);font-style:italic;margin-top:6px}
+.pill{font-size:13px;font-weight:500;background:var(--warn-bg);color:var(--warn);padding:5px 12px;border-radius:999px}
+.quote{font-size:13px;color:var(--mute);margin-top:6px;padding-left:10px;border-left:2px solid var(--c-pri-l)}
 .vb{font-size:12px}
 .vb>summary{cursor:pointer;color:var(--mute);font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:6px;padding:2px 0;user-select:none}
 .vb>summary::-webkit-details-marker{display:none}
 .vb>summary::before{content:"";width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin-right:2px}
 .vb[open]>summary::before{transform:rotate(45deg)}
 .vb>summary:hover{color:var(--ink)}
-.vb>summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.vb>summary:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){.vb>summary::before{transition:none}}
-.chip{font-size:12px;font-weight:600;background:var(--soft);border-radius:6px;padding:3px 8px}
+.chip{font-size:12px;font-weight:600;background:var(--soft);color:var(--ink);border-radius:999px;padding:3px 10px}
 .dot{display:inline-block;width:12px;height:12px;border-radius:3px;flex:none}
-.banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.5}
+.banner{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.5}
 .banner ul{margin:6px 0 0;padding-left:18px}
-.maxh{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.maxh{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:14px}
 .maxh th{position:sticky;top:0;background:var(--card)}
-.pdtbtn{display:flex;height:22px;padding:0;border:0;border-radius:6px;overflow:hidden;background:#DAD7CB;cursor:pointer;width:100%}
+.pdtbtn{display:flex;height:20px;padding:0;border:0;border-radius:999px;overflow:hidden;background:var(--track2);cursor:pointer;width:100%}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--mute)}
-@media (max-width:600px){h1{font-size:26px}.wrap{padding:20px 16px 48px}}
+@media (max-width:600px){.wrap{padding:20px 16px 48px}.hero{padding:24px;border-radius:22px}.card{padding:18px;border-radius:18px}}
 </style>
 </head>
 <body>
@@ -85,20 +98,20 @@ const pct=(x,d=1)=>x==null?"n/d":(x*100).toFixed(d).replace(".",",")+"%";
 const num=x=>x==null?"n/d":Number(x).toLocaleString("es-AR");
 const dec=(x,d=1)=>x==null?"n/d":Number(x).toFixed(d).replace(".",",");
 const lowT=(t)=>t?t.toLowerCase():"—";
-const COLORS={txb:"#C2410C",txs:"#D9A441",cb:"#2F6F8F",cs:"#7BA7BC",int:"#8B6BAE",sin:"#B8B5A8"};
+const COLORS={txb:"var(--c-pri)",txs:"var(--c-pri-l)",cb:"var(--c-sec)",cs:"var(--c-sec-l)",int:"var(--c-alert)",sin:"var(--c-neu)"};
 const DCOL=[COLORS.txb,COLORS.txs,COLORS.cb,COLORS.cs,COLORS.int,COLORS.sin];
 function seg(){return `<div class="seg" role="group" aria-label="Período">${SCOPES.map(([k,l])=>`<button data-act="scope" data-v="${k}" class="${S.scope===k?"on":""}">${l}</button>`).join("")}</div>`}
 function header(){
- return `<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
- <div style="display:flex;flex-direction:column;gap:6px">
-  <div class="eyebrow">Customer Experience · Marketplace</div>
-  <h1>Reporte CX · Julio a octubre 2026</h1>
-  <div class="mute" style="font-size:15px">Rango analizado: 01/07/2026 a 15/10/2026 · primer reporte, acumulado y mes a mes</div>
+ return `<header class="hero"><div class="hero-in">
+ <div>
+  <span class="ov">Customer Experience · Marketplace</span>
+  <h1>Reporte CX<br>julio a octubre 2026</h1>
+  <div class="sub">Rango analizado: 01/07/2026 a 15/10/2026 · primer reporte, acumulado y mes a mes</div>
  </div>
  <div class="seg" role="tablist">
   <button role="tab" aria-selected="${S.tab==="kpi"}" data-act="tab" data-v="kpi" class="${S.tab==="kpi"?"on":""}">KPIs</button>
   <button role="tab" aria-selected="${S.tab==="base"}" data-act="tab" data-v="base" class="${S.tab==="base"?"on":""}">Transparencia de la base</button>
- </div></div>`;
+ </div></div></header>`;
 }
 function ctxCards(r){
  const c=r.ctx;
@@ -137,24 +150,24 @@ function weekly(){
  const x=i=>L+(Rr-L)*i/(n-1), yo=v=>B-(B-T)*v/mo, yc=v=>B-(B-T)*v/mc;
  const line=(arr,y)=>arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
  const dots=(arr,y,c)=>arr.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.2" fill="${c}"><title>Semana del ${w.labels[i]}${i===n-1?"*":""}: ${v}</title></circle>`).join("");
- let grid="";for(let k=0;k<=4;k++){const yy=B-(B-T)*k/4;grid+=`<line x1="${L}" y1="${yy}" x2="${Rr}" y2="${yy}" stroke="var(--line)"/><text x="${L-6}" y="${yy+4}" font-size="11" fill="var(--mute)" text-anchor="end">${Math.round(mo*k/4)}</text><text x="${Rr+6}" y="${yy+4}" font-size="11" fill="var(--mute)" text-anchor="start">${Math.round(mc*k/4)}</text>`}
- const xl=w.labels.map((l,i)=>`<text x="${x(i)}" y="${B+16}" font-size="10" fill="var(--mute)" text-anchor="middle" ${i%2?'opacity=".0"':''}>${l}${i===n-1?"*":""}</text>`).join("");
- const xl2=w.labels.map((l,i)=>i%2?`<text x="${x(i)}" y="${B+16}" font-size="10" fill="var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("");
+ let grid="";for(let k=0;k<=4;k++){const yy=B-(B-T)*k/4;grid+=`<line x1="${L}" y1="${yy}" x2="${Rr}" y2="${yy}" style="stroke:var(--line)"/><text x="${L-6}" y="${yy+4}" font-size="11" style="fill:var(--mute)" text-anchor="end">${Math.round(mo*k/4)}</text><text x="${Rr+6}" y="${yy+4}" font-size="11" style="fill:var(--mute)" text-anchor="start">${Math.round(mc*k/4)}</text>`}
+ const xl=w.labels.map((l,i)=>`<text x="${x(i)}" y="${B+16}" font-size="10" style="fill:var(--mute)" text-anchor="middle" ${i%2?'opacity=".0"':''}>${l}${i===n-1?"*":""}</text>`).join("");
+ const xl2=w.labels.map((l,i)=>i%2?`<text x="${x(i)}" y="${B+16}" font-size="10" style="fill:var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("");
  const fo=x(w.first_orders_week);
  return `<section class="card"><h2>1. Evolución semanal: órdenes vs casos</h2>
  <div class="note">Órdenes creadas, casos transaccionales (incluye inferidos por contenido) y casos consultivos por semana. Las órdenes van en el eje izquierdo y los casos en el derecho, para comparar la forma de las tres líneas. La última semana (12–15/10) está incompleta (*). Órdenes pagadas según el archivo 2.</div>
  <div class="scroll"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Líneas semanales de órdenes creadas, casos transaccionales y casos consultivos" style="width:100%;min-width:560px;height:auto;display:block">
  ${grid}
- <text x="${L-6}" y="${T-14}" font-size="11" fill="var(--mute)" text-anchor="end">Órdenes</text><text x="${Rr+6}" y="${T-14}" font-size="11" fill="var(--mute)" text-anchor="start">Casos</text>
- <text x="${(L+Rr)/2}" y="${H-6}" font-size="11" fill="var(--mute)" text-anchor="middle">Semana (lunes de inicio)</text>
-  <rect x="${x(n-1)-14}" y="${T}" width="28" height="${B-T}" fill="var(--soft)" opacity=".55"/>
- ${xl2}${w.labels.map((l,i)=>i%2===0?`<text x="${x(i)}" y="${B+16}" font-size="10" fill="var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("")}
- <polyline points="${line(w.orders,yo)}" fill="none" stroke="#7A7770" stroke-width="2.5" stroke-dasharray="6 4"/>
- <polyline points="${line(w.tx,yc)}" fill="none" stroke="#C2410C" stroke-width="2.5"/>
- <polyline points="${line(w.cons,yc)}" fill="none" stroke="#2F6F8F" stroke-width="2.5"/>
- ${dots(w.orders,yo,"#7A7770")}${dots(w.tx,yc,"#C2410C")}${dots(w.cons,yc,"#2F6F8F")}
+ <text x="${L-6}" y="${T-14}" font-size="11" style="fill:var(--mute)" text-anchor="end">Órdenes</text><text x="${Rr+6}" y="${T-14}" font-size="11" style="fill:var(--mute)" text-anchor="start">Casos</text>
+ <text x="${(L+Rr)/2}" y="${H-6}" font-size="11" style="fill:var(--mute)" text-anchor="middle">Semana (lunes de inicio)</text>
+  <rect x="${x(n-1)-14}" y="${T}" width="28" height="${B-T}" style="fill:var(--soft)" opacity=".55"/>
+ ${xl2}${w.labels.map((l,i)=>i%2===0?`<text x="${x(i)}" y="${B+16}" font-size="10" style="fill:var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("")}
+ <polyline points="${line(w.orders,yo)}" fill="none" style="stroke:var(--c-grey)" stroke-width="2.5" stroke-dasharray="6 4"/>
+ <polyline points="${line(w.tx,yc)}" fill="none" style="stroke:var(--c-pri)" stroke-width="2.5"/>
+ <polyline points="${line(w.cons,yc)}" fill="none" style="stroke:var(--c-sec)" stroke-width="2.5"/>
+ ${dots(w.orders,yo,"var(--c-grey)")}${dots(w.tx,yc,"var(--c-pri)")}${dots(w.cons,yc,"var(--c-sec)")}
  </svg></div>
- <div class="legend"><span><span style="display:inline-block;width:18px;border-top:3px dashed #7A7770;margin-right:6px;vertical-align:middle"></span>Órdenes creadas (eje izq.)</span><span><span style="display:inline-block;width:18px;height:3px;background:#C2410C;margin-right:6px;vertical-align:middle"></span>Casos transaccionales (eje der.)</span><span><span style="display:inline-block;width:18px;height:3px;background:#2F6F8F;margin-right:6px;vertical-align:middle"></span>Casos consultivos (eje der.)</span></div></section>`;
+ <div class="legend"><span><span style="display:inline-block;width:18px;border-top:3px dashed var(--c-grey);margin-right:6px;vertical-align:middle"></span>Órdenes creadas (eje izq.)</span><span><span style="display:inline-block;width:18px;height:3px;background:var(--c-pri);margin-right:6px;vertical-align:middle"></span>Casos transaccionales (eje der.)</span><span><span style="display:inline-block;width:18px;height:3px;background:var(--c-sec);margin-right:6px;vertical-align:middle"></span>Casos consultivos (eje der.)</span></div></section>`;
 }
 function quotesBlock(quotes,key){
  if(!quotes||!quotes.length)return "";
@@ -185,7 +198,7 @@ function crBlock(r,kind){
   if(c.rate==null)return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${num(tot)} ${tot===1?"caso":"casos"}</td><td class="mute">volumen; no se mide como tasa</td>${mixCell(c.mix,tot)}</tr>`;
   return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${pct(c.rate)}</td><td class="mute">${num(c.num)} / ${num(c.den)} ${isTx?"órdenes":(s==="Compradores"?"compradores registrados":"vendedores registrados")}${isTx?"":`<div class="small">sobre activos: ${pct(c.rate_act)} (${num(c.num)} / ${num(c.den_act)})</div>`}</td>${mixCell(c.mix,tot)}</tr>`}).join("");
  const segs=["Compradores","Vendedores"].filter(s=>(r.clusters[kind][s]||[]).reduce((x,c)=>x+c.n,0)>=3);
- const grp=(segs.length?segs:["Compradores"]).map(s=>clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"#C2410C":"#2F6F8F",S.scope+"|"+kind+"|"+s)).join("");
+ const grp=(segs.length?segs:["Compradores"]).map(s=>clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"var(--c-pri)":"var(--c-sec)",S.scope+"|"+kind+"|"+s)).join("");
  return `<div class="inner"><div><h3>${title}</h3><div class="small mute">${def}</div></div>
  <div class="scroll"><table style="min-width:660px"><thead><tr><th>Segmento</th><th>Contact rate</th><th>Num. / Den.</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th></tr></thead><tbody>${rows}</tbody></table></div>
  <div class="small mute">% de tipo de registro sobre los casos del segmento ${isTx?"asociados a orden":"consultivos"} (entre paréntesis, cantidad de casos).</div>${isTx?"":sellerNote(r)}
@@ -217,15 +230,15 @@ function s2(r){
  return `<section class="card"><h2>3. Canales de contacto</h2>
  <div class="note">% de casos por canal, aperturado por tipo de registro. El largo de la barra es el peso del canal. Incluye todos los casos analizados.</div>
  ${r.channels.map(c=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${pct(c.pct,0)} · ${num(c.n)} casos · predomina ${c.top.toLowerCase()}</span></div>
- <div style="display:flex;width:${(c.pct/mx*100).toFixed(1)}%;min-width:8px;height:14px;border-radius:5px;overflow:hidden;background:var(--track)"><div style="height:100%;width:${c.mix.Consulta*100}%;background:#2F6F8F"></div><div style="height:100%;width:${c.mix.Solicitud*100}%;background:#D9A441"></div><div style="height:100%;width:${c.mix.Reclamo*100}%;background:#C2410C"></div></div>
+ <div style="display:flex;width:${(c.pct/mx*100).toFixed(1)}%;min-width:8px;height:14px;border-radius:5px;overflow:hidden;background:var(--track)"><div style="height:100%;width:${c.mix.Consulta*100}%;background:var(--c-pri)"></div><div style="height:100%;width:${c.mix.Solicitud*100}%;background:var(--c-sec2)"></div><div style="height:100%;width:${c.mix.Reclamo*100}%;background:var(--c-alert)"></div></div>
  <div class="small mute">Consulta ${pct(c.mix.Consulta,0)} · Solicitud ${pct(c.mix.Solicitud,0)} · Reclamo ${pct(c.mix.Reclamo,0)}</div></div>`).join("")}
- <div class="legend"><span><span class="dot" style="background:#2F6F8F;width:10px;height:10px;margin-right:6px"></span>Consulta</span><span><span class="dot" style="background:#D9A441;width:10px;height:10px;margin-right:6px"></span>Solicitud</span><span><span class="dot" style="background:#C2410C;width:10px;height:10px;margin-right:6px"></span>Reclamo</span></div></section>`;
+ <div class="legend"><span><span class="dot" style="background:var(--c-pri);width:10px;height:10px;margin-right:6px"></span>Consulta</span><span><span class="dot" style="background:var(--c-sec2);width:10px;height:10px;margin-right:6px"></span>Solicitud</span><span><span class="dot" style="background:var(--c-alert);width:10px;height:10px;margin-right:6px"></span>Reclamo</span></div></section>`;
 }
 function s3(r){
  const rc=r.recontact, mat=r.matrix[S.win];
  const allN=Object.keys(mat);const names=allN.filter(n=>mat[n].total.rec>0).sort((a,b)=>mat[b].total.rec-mat[a].total.rec||mat[b].total.n-mat[a].total.n);const hid=allN.length-names.length;
- const cell=c=>{ if(!c.n)return `<td style="padding:8px 6px;border-radius:6px" class="mute">—</td>`; const rt=c.rec/c.n; const al=Math.min(.6,rt*2.2);
-   return `<td style="padding:8px 6px;border-radius:6px;background:rgba(194,65,12,${al.toFixed(2)})">${c.rec} · ${pct(rt,0)}<div class="small mute">de ${c.n}</div></td>`};
+ const cell=c=>{ if(!c.n)return `<td style="padding:8px 6px;border-radius:6px" class="mute">—</td>`; const rt=c.rec/c.n; const al=Math.min(.55,rt*2.2);
+   return `<td style="padding:8px 6px;border-radius:6px;background:rgba(255,102,0,${al.toFixed(2)})">${c.rec} · ${pct(rt,0)}<div class="small mute">de ${c.n}</div></td>`};
  return `<section class="card"><h2>4. Recontacto</h2>
  <div class="note">Mismo contacto y mismo motivo dentro de la ventana (misma orden si la hay); incluye reaperturas y casos hijos. Solo ${pct(X.qual.contact_id_cov,0)} de los casos trae algún dato para reconocer al contacto, así que la tasa es un piso.</div>
  <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
@@ -240,7 +253,7 @@ function s4(r){
  const p=r.pdt;
  const g=(key,name,when,read)=>{const x=p[key];const w=x.rate?Math.max(2,x.rate*100):0;const open=S.open[key+S.scope];
   return `<div class="inner" style="gap:6px"><div class="row"><span style="font-weight:600">${name}</span><span>${num(x.orders)} órdenes</span></div>
-  <button class="pdtbtn" data-act="open" data-v="${key}" aria-expanded="${!!open}" title="Casos de Salesforce: ${x.cases.length?x.cases.join(", "):"ninguno"}"><span style="display:block;height:100%;width:${w}%;background:#C2410C"></span></button>
+  <button class="pdtbtn" data-act="open" data-v="${key}" aria-expanded="${!!open}" title="Casos de Salesforce: ${x.cases.length?x.cases.join(", "):"ninguno"}"><span style="display:block;height:100%;width:${w}%;background:var(--c-alert)"></span></button>
   <div class="small mute">Pasá el mouse o hacé click en la barra para ver los números de caso de los contactos (la parte naranja es el % de órdenes con reclamo; el resto son órdenes sin reclamo).</div>
   ${open?`<div style="display:flex;flex-wrap:wrap;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px">${x.cases.length?x.cases.map(c=>`<span class="chip">${c}</span>`).join(""):'<span class="small mute">Sin casos</span>'}</div>`:""}
   <div class="row" style="font-size:13px"><span><b>${num(x.contact_orders)}</b> órdenes con reclamo de envío ${when}</span><span style="font-weight:600">Contact rate ${pct(x.rate)}</span></div>
@@ -250,7 +263,7 @@ function s4(r){
  <div class="note">PDT = promise delivery time (72 h = 3 días hábiles desde la creación, sin sábados, domingos ni feriados 15/08 y 29/09). Sobre el total de órdenes de cada grupo, cuántas generaron un reclamo de envío antes de vencer la promesa y cuántas después de vencida. Usa solo el archivo 3 (histórico desde el 17/07, el único con fechas de cada estado): ${num(r.ctx.orders_hist)} de las ${num(r.ctx.orders)} órdenes del período. Solo cuenta casos asociados a esas órdenes.</div>
  ${g("dentro","Contactos por órdenes dentro de PDT","antes de vencer la promesa","Expectativa o comunicación: el cliente consulta antes de que la promesa venza.")}
  ${g("fuera","Contactos por órdenes fuera de PDT","después de vencida la promesa","Logístico: la orden no llegó dentro de la promesa y el cliente reclama.")}
- <div class="legend"><span><span class="dot" style="background:#C2410C;width:10px;height:10px;margin-right:6px"></span>Órdenes con reclamo de envío</span><span><span class="dot" style="background:#DAD7CB;width:10px;height:10px;margin-right:6px"></span>Órdenes sin reclamo</span></div>
+ <div class="legend"><span><span class="dot" style="background:var(--c-alert);width:10px;height:10px;margin-right:6px"></span>Órdenes con reclamo de envío</span><span><span class="dot" style="background:var(--track2);width:10px;height:10px;margin-right:6px"></span>Órdenes sin reclamo</span></div>
  <div style="font-size:14px;background:var(--soft);border-radius:8px;padding:10px 12px">Fuera de PDT el contact rate es <b>${ratio}</b> el de dentro de PDT. Una brecha grande apunta a problema logístico; una brecha chica, a comunicación o producto. ${p.excl?`<span class="mute">(${p.excl} órdenes canceladas antes de vencer la promesa quedan fuera de ambos grupos.)</span>`:""}</div></section>`;
 }
 function stageRow(s,color){
@@ -266,9 +279,9 @@ function s5(r){
  const u=r.stages_unplaced;
  return `<section class="card"><h2>6. Contactos por etapa de la orden</h2>
  <div class="note">Etapa de la orden al momento del contacto transaccional (estado vigente al mediodía de la fecha del caso). Primero el recorrido feliz y después las órdenes que salieron de él. Usa el historial de estados del archivo 3 (desde el 17/07). Se ubican ${num(r.stages_total)} contactos con orden; no se pudieron ubicar: ${num(u.inferidos)} inferidos por contenido (sin orden), ${num(u.orden_fuera_archivo3)} con orden sin historial de estados (anterior al 17/07) y ${num(u.sin_dato)} sin dato de etapa. Las órdenes expiradas (intención de compra) no tienen etapa; sus contactos están en la sección 7.</div>
- ${hp.map(n=>stageRow(st[n],"#C2410C")).join("")}
+ ${hp.map(n=>stageRow(st[n],"var(--c-pri)")).join("")}
  <h3 style="font-size:15px;margin-top:8px">Fuera del happy path</h3>
- ${off.map(n=>stageRow(st[n],"#7A7770")).join("")}</section>`;
+ ${off.map(n=>stageRow(st[n],"var(--c-grey)")).join("")}</section>`;
 }
 function s6(r){
  const i=r.intencion;
@@ -308,12 +321,12 @@ function base(){
  const mt=[["Por order ID",A["order ID"]],["Por cédula",A["cédula"]],["Por email",A["email"]],["Por nombre del cliente",A["nombre"]],["Inferido como transaccional por el contenido del caso (sin orden)",A.inferido],["Orden expirada (intención de compra, análisis aparte)",A.intencion],["Sin orden asociada (consultivo)",A.consultivo]];
  return `<div style="display:flex;flex-direction:column;gap:28px">
  <section class="card"><h2>De la base original a la base analizada</h2><div class="note">Cada caso descartado se cuenta una sola vez, en el primer motivo que aplica (prueba, otra empresa, campaña ajena, bug del bot). Original = descartados + analizados.</div>
- ${row("Casos originales",orig,"#7A7770","Export de Salesforce completo, 01/07 a 15/10")}
- ${row("Descartados: prueba o modo test",by["Prueba o modo test"],"#C2410C","Primer motivo aplicado")}
- ${row("Descartados: otras empresas (Ubox)",by["Otra empresa (Ubox)"],"#C2410C","Segundo motivo aplicado")}
- ${row("Descartados: campaña ajena (remera de la selección / albirroja)",by["Campaña ajena (camisetas selección)"],"#C2410C","Tercer motivo aplicado")}
- ${row("Descartados: bug del bot",by["Bug del bot (caso cerrado sin asunto ni descripción)"],"#C2410C","Casos que ingresaron cerrados, sin asunto ni descripción; no debieron crearse en Salesforce. Se cuentan en la limpieza, no en el análisis.")}
- ${row("Casos para el análisis",f.rest,"#2F6F8F","Base de todas las métricas. Verificación: "+num(orig)+" = "+num(orig-f.rest)+" descartados + "+num(f.rest)+" analizados")}</section>
+ ${row("Casos originales",orig,"var(--c-grey)","Export de Salesforce completo, 01/07 a 15/10")}
+ ${row("Descartados: prueba o modo test",by["Prueba o modo test"],"var(--c-pri)","Primer motivo aplicado")}
+ ${row("Descartados: otras empresas (Ubox)",by["Otra empresa (Ubox)"],"var(--c-pri)","Segundo motivo aplicado")}
+ ${row("Descartados: campaña ajena (remera de la selección / albirroja)",by["Campaña ajena (camisetas selección)"],"var(--c-pri)","Tercer motivo aplicado")}
+ ${row("Descartados: bug del bot",by["Bug del bot (caso cerrado sin asunto ni descripción)"],"var(--c-pri)","Casos que ingresaron cerrados, sin asunto ni descripción; no debieron crearse en Salesforce. Se cuentan en la limpieza, no en el análisis.")}
+ ${row("Casos para el análisis",f.rest,"var(--c-sec)","Base de todas las métricas. Verificación: "+num(orig)+" = "+num(orig-f.rest)+" descartados + "+num(f.rest)+" analizados")}</section>
  <div class="two">
  <section class="card"><h2>Cómo se asoció cada caso a una orden</h2><div class="note">Prioridad: order ID, cédula, email, nombre (solo si el match es único). Si un cliente tiene varias órdenes, se asigna la más reciente anterior al caso (asociación inferida).</div>
  ${mt.map(([n,v])=>`<div class="row" style="border-top:1px solid var(--line);padding-top:8px"><span>${n}</span><span style="font-weight:600">${num(v)} · ${pct(v/A.total)}</span></div>`).join("")}
