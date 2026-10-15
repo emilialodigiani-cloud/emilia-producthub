@@ -77,6 +77,8 @@ Todas se calculan dos veces: **período completo** y **mes a mes**. Si el mes en
 
 ## Entrega: HTML one-pager con dos pestañas
 
+Usá como referencia de diseño el template de `template/reporte-cx.dc.html` (junto a este skill), reemplazando los placeholders con los datos calculados.
+
 Archivo único HTML (sin dependencias externas que fallen sin red; gráficos en SVG o librería embebida).
 
 - **Pestaña 1, KPIs:** contexto general, métricas 1 a 7 con gráficos, vista período completo y vista mes a mes (toggle o secciones), aclarando el mes incompleto.
