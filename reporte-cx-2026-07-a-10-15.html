@@ -27,12 +27,40 @@ h1{margin:0;font-size:34px;line-height:1.15} h2{margin:0;font-size:20px} h3{marg
 .bar{height:8px;background:var(--track);border-radius:4px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:inherit}
 .bar.l{height:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}
+.mt{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+.donutrow{display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px;align-items:center}
+.dt{font-variant-numeric:tabular-nums}
+.dt th,.dt td{padding:9px 10px;text-align:right}
+.dt th:first-child,.dt td:first-child{text-align:left}
+.dt th{white-space:nowrap;font-size:13px}
+.dt tbody tr:first-child td{border-top:0}
+@media (max-width:720px){.donutrow{grid-template-columns:minmax(0,1fr);justify-items:center}.donutrow .scroll{width:100%}}
+.mt{font-size:13px}
+.mt th,.mt td{padding:10px 8px;text-align:right;border-top:1px solid var(--line)}
+.mt th:first-child,.mt td:first-child{text-align:left}
+.mt thead th{white-space:nowrap;line-height:1.25;vertical-align:bottom;font-weight:600;font-size:13px;border-top:0}
+.mt thead tr.grp th{text-align:center;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding-bottom:6px}
+.mt .g{border-left:1px solid var(--line)}
+.mt td.key{font-weight:600}
+.mt td.dim{color:var(--mute)}
+.mt tr.tot td{border-bottom:2px solid var(--line);background:var(--bg)}
+.mt tr.sel td{background:var(--soft)}
+.mt tbody tr:first-child td{border-top:0}
+
 th{text-align:left;color:var(--mute);padding:8px 6px;font-weight:600;white-space:nowrap}
 td{padding:8px 6px}
 tbody tr{border-top:1px solid var(--line)}
 .scroll{overflow-x:auto}
 .pill{font-size:13px;background:var(--warn-bg);color:var(--warn);padding:4px 10px;border-radius:999px}
-.quote{font-size:13px;color:var(--mute);font-style:italic}
+.quote{font-size:13px;color:var(--mute);font-style:italic;margin-top:6px}
+.vb{font-size:12px}
+.vb>summary{cursor:pointer;color:var(--mute);font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:6px;padding:2px 0;user-select:none}
+.vb>summary::-webkit-details-marker{display:none}
+.vb>summary::before{content:"";width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin-right:2px}
+.vb[open]>summary::before{transform:rotate(45deg)}
+.vb>summary:hover{color:var(--ink)}
+.vb>summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){.vb>summary::before{transition:none}}
 .chip{font-size:12px;font-weight:600;background:var(--soft);border-radius:6px;padding:3px 8px}
 .dot{display:inline-block;width:12px;height:12px;border-radius:3px;flex:none}
 .banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.5}
@@ -51,7 +79,7 @@ const D={"R": {"all": {"scope": "all", "label": "Período completo", "ctx": {"bu
 const R=D.R, X=D.X;
 const TIPOS=["Consulta","Solicitud","Reclamo"];
 const SCOPES=[["all","Período completo"],["2026-07","Julio"],["2026-08","Agosto"],["2026-09","Septiembre"],["2026-10","Octubre *"]];
-const S={tab:"kpi",scope:"all",win:"7",open:{}};
+const S={tab:"kpi",scope:"all",win:"7",open:{},vb:{}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pct=(x,d=1)=>x==null?"n/d":(x*100).toFixed(d).replace(".",",")+"%";
 const num=x=>x==null?"n/d":Number(x).toLocaleString("es-AR");
@@ -82,10 +110,25 @@ function ctxCards(r){
  </div>`;
 }
 function monthly(){
- const rows=X.monthly.map(m=>`<tr style="${m.scope===S.scope?"background:var(--soft)":""}"><td style="font-weight:600">${m.label}${m.scope==="2026-10"?" *":""}${m.scope==="2026-07"?" †":""}</td><td>${num(m.orders)}</td><td>${num(m.cases)}</td><td>${num(m.tx)} / ${num(m.cons)}</td><td>${pct(m.crtx)}</td><td>${pct(m.crcons,0)}</td><td>${pct(m.rec7)}</td><td>${pct(m.pdt_in)}</td><td>${pct(m.pdt_out)}</td><td>${m.ratio==null?"n/d":dec(m.ratio,2)+"x"}</td><td>${num(m.exp)} · ${pct(m.pct_exp,0)}</td></tr>`).join("");
+ const rows=X.monthly.map(m=>{
+  const all=m.scope==="all", sel=m.scope===S.scope?" sel":"";
+  const nm=m.label+(m.scope==="2026-10"?" *":"")+(m.scope==="2026-07"?" †":"");
+  return `<tr class="${all?"tot":""}${sel}"><td class="key">${nm}</td>
+  <td class="g">${num(m.orders)}</td><td>${num(m.cases)}</td><td>${num(m.tx)}</td><td>${num(m.cons)}</td>
+  <td class="g key">${pct(m.crtx)}</td><td class="key">${pct(m.crcons,0)}</td>
+  <td class="g key">${pct(m.rec7)}</td>
+  <td class="g">${pct(m.pdt_in)}</td><td>${pct(m.pdt_out)}</td><td>${m.ratio==null?"n/d":dec(m.ratio,2)+"x"}</td>
+  <td class="g">${num(m.exp)} <span class="dim">(${pct(m.pct_exp,0)})</span></td></tr>`}).join("");
  return `<section class="card"><h2>Mes a mes</h2>
  <div class="note">Resumen comparable de los indicadores principales. Las columnas de orden (órdenes, CR transaccional, PDT) usan la cohorte de órdenes creadas en el mes; las de caso usan el mes de apertura.</div>
- <div class="scroll"><table style="min-width:1000px"><thead><tr><th>Período</th><th>Órdenes</th><th>Casos</th><th>Transacc. / consult.</th><th>CR transacc. compradores</th><th>CR consult. compradores (s/ registrados)</th><th>Recontacto 7d</th><th>Envío dentro PDT*</th><th>Envío fuera PDT*</th><th>Razón fuera/dentro*</th><th>Órdenes expiradas</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <div class="scroll"><table class="mt" style="min-width:860px"><thead>
+ <tr class="grp"><th></th><th colspan="4" class="g">Volumen</th><th colspan="2" class="g">Contact rate<br>compradores</th><th class="g">Recontacto</th><th colspan="3" class="g">Envío según promesa<br>de entrega (PDT)*</th><th class="g">Órdenes<br>sin pago</th></tr>
+ <tr><th>Período</th>
+ <th class="g">Órdenes<br>pagadas</th><th>Casos<br>analizados</th><th>Casos<br>transacc.</th><th>Casos<br>consult.</th>
+ <th class="g">Transaccional<br>(s/ órdenes)</th><th>Consultivo<br>(s/ registrados)</th>
+ <th class="g">A 7 días<br>(s/ casos)</th>
+ <th class="g">Dentro<br>de PDT</th><th>Fuera<br>de PDT</th><th>Razón fuera<br>/ dentro</th>
+ <th class="g">Expiradas<br>(% de creadas)</th></tr></thead><tbody>${rows}</tbody></table></div>
  <div class="small mute">Octubre (*) es parcial (hasta el 15/10): no comparable con meses cerrados; sus órdenes aún tienen poco tiempo para generar contactos. Las columnas de promesa de entrega (PDT) usan solo el archivo 3 (histórico desde el 17/07, el único con historial de estados), por eso julio no tiene dato. El resto usa el archivo 2 como universo de órdenes. † Julio: casos desde el 01/07 y órdenes del archivo 2 desde esa fecha.</div></section>`;
 }
 function weekly(){
@@ -99,7 +142,7 @@ function weekly(){
  const xl=w.labels.map((l,i)=>`<text x="${x(i)}" y="${B+16}" font-size="10" fill="var(--mute)" text-anchor="middle" ${i%2?'opacity=".0"':''}>${l}${i===n-1?"*":""}</text>`).join("");
  const xl2=w.labels.map((l,i)=>i%2?`<text x="${x(i)}" y="${B+16}" font-size="10" fill="var(--mute)" text-anchor="middle">${l}${i===n-1?"*":""}</text>`:"").join("");
  const fo=x(w.first_orders_week);
- return `<section class="card"><h2>8. Evolución semanal: órdenes vs casos</h2>
+ return `<section class="card"><h2>1. Evolución semanal: órdenes vs casos</h2>
  <div class="note">Órdenes creadas, casos transaccionales (incluye inferidos por contenido) y casos consultivos por semana. Las órdenes van en el eje izquierdo y los casos en el derecho, para comparar la forma de las tres líneas. La última semana (12–15/10) está incompleta (*). Órdenes pagadas según el archivo 2.</div>
  <div class="scroll"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Líneas semanales de órdenes creadas, casos transaccionales y casos consultivos" style="width:100%;min-width:560px;height:auto;display:block">
  ${grid}
@@ -114,13 +157,17 @@ function weekly(){
  </svg></div>
  <div class="legend"><span><span style="display:inline-block;width:18px;border-top:3px dashed #7A7770;margin-right:6px;vertical-align:middle"></span>Órdenes creadas (eje izq.)</span><span><span style="display:inline-block;width:18px;height:3px;background:#C2410C;margin-right:6px;vertical-align:middle"></span>Casos transaccionales (eje der.)</span><span><span style="display:inline-block;width:18px;height:3px;background:#2F6F8F;margin-right:6px;vertical-align:middle"></span>Casos consultivos (eje der.)</span></div></section>`;
 }
-function clusterGroup(title,items,color){
+function quotesBlock(quotes,key){
+ if(!quotes||!quotes.length)return "";
+ return `<details class="vb" data-k="${esc(key)}"${S.vb[key]?" open":""}><summary>Ver verbatims (${quotes.length})</summary>${quotes.map(q=>`<div class="quote">“${esc(q.text)}” · Caso ${q.id}</div>`).join("")}</details>`;
+}
+function clusterGroup(title,items,color,kp){
  if(!items||!items.length)return `<div><h4>Motivos · ${title}</h4><div class="note">Sin casos en este período.</div></div>`;
  const mx=Math.max(...items.map(i=>i.n));
  return `<div style="display:flex;flex-direction:column;gap:12px"><h4>Motivos · ${title}</h4>${items.map(it=>`<div style="display:flex;flex-direction:column;gap:4px">
   <div class="row"><span style="font-weight:600">${esc(it.name)}</span><span>${num(it.n)} · ${pct(it.pct,0)}</span></div>
   <div class="bar"><i style="width:${(it.n/mx*100).toFixed(1)}%;background:${color}"></i></div>
-  ${it.quotes.map(q=>`<div class="quote">“${esc(q.text)}” · Caso ${q.id}</div>`).join("")}</div>`).join("")}</div>`;
+  ${quotesBlock(it.quotes,kp+"|"+it.name)}</div>`).join("")}</div>`;
 }
 function mixCell(m,tot){return TIPOS.map(t=>`<td>${tot?pct(m[t]/tot,0):"—"} <span class="small mute">(${m[t]})</span></td>`).join("")}
 function sellerNote(r){
@@ -132,13 +179,14 @@ function sellerNote(r){
 function crBlock(r,kind){
  const isTx=kind==="tx";
  const title=isTx?"Contact rate transaccional":"Contact rate consultivo";
- const def=isTx?"Poscompra: órdenes con contacto / órdenes pagadas del período (archivo 2; cohorte de creación; cuenta órdenes, no casos). En vendedores se informa volumen, no tasa. Solo entran los casos asociados a una orden; los inferidos por contenido son transaccionales pero no se pueden asignar a una orden concreta, así que se muestran aparte en la foto rápida y en los motivos.":"Casos consultivos / usuarios registrados del segmento (a modo de referencia se muestra también la tasa sobre usuarios activos). En vendedores se informa volumen, no tasa. Los casos de órdenes expiradas no entran: se analizan aparte en la sección 6.";
+ const def=isTx?"Poscompra: órdenes con contacto / órdenes pagadas del período (archivo 2; cohorte de creación; cuenta órdenes, no casos). En vendedores se informa volumen, no tasa. Solo entran los casos asociados a una orden; los inferidos por contenido son transaccionales pero no se pueden asignar a una orden concreta, así que se muestran aparte en la foto rápida y en los motivos.":"Casos consultivos / usuarios registrados del segmento (a modo de referencia se muestra también la tasa sobre usuarios activos). En vendedores se informa volumen, no tasa. Los casos de órdenes expiradas no entran: se analizan aparte en la sección 7.";
  const rows=["Compradores","Vendedores"].map(s=>{
   const c=r.cr[kind][s];
   const tot=isTx?c.cases:c.num;
   if(c.rate==null)return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${num(tot)} ${tot===1?"caso":"casos"}</td><td class="mute">volumen; no se mide como tasa</td>${mixCell(c.mix,tot)}</tr>`;
   return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${pct(c.rate)}</td><td class="mute">${num(c.num)} / ${num(c.den)} ${isTx?"órdenes":(s==="Compradores"?"compradores registrados":"vendedores registrados")}${isTx?"":`<div class="small">sobre activos: ${pct(c.rate_act)} (${num(c.num)} / ${num(c.den_act)})</div>`}</td>${mixCell(c.mix,tot)}</tr>`}).join("");
- const grp=["Compradores","Vendedores"].map(s=>clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"#C2410C":"#2F6F8F")).join("");
+ const segs=["Compradores","Vendedores"].filter(s=>(r.clusters[kind][s]||[]).reduce((x,c)=>x+c.n,0)>=3);
+ const grp=(segs.length?segs:["Compradores"]).map(s=>clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"#C2410C":"#2F6F8F",S.scope+"|"+kind+"|"+s)).join("");
  return `<div class="inner"><div><h3>${title}</h3><div class="small mute">${def}</div></div>
  <div class="scroll"><table style="min-width:660px"><thead><tr><th>Segmento</th><th>Contact rate</th><th>Num. / Den.</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th></tr></thead><tbody>${rows}</tbody></table></div>
  <div class="small mute">% de tipo de registro sobre los casos del segmento ${isTx?"asociados a orden":"consultivos"} (entre paréntesis, cantidad de casos).</div>${isTx?"":sellerNote(r)}
@@ -146,18 +194,20 @@ function crBlock(r,kind){
 }
 function s1(r){
  let acc=0;const stops=r.donut.map((d,i)=>{const col=DCOL[i];const a0=acc;acc+=d.share*100;return `${col} ${a0.toFixed(2)}% ${acc.toFixed(2)}%`}).join(",");
- const leg=r.donut.map((d,i)=>`<div style="display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap"><span class="dot" style="background:${DCOL[i]}"></span><span style="flex:1;font-weight:600;min-width:200px">${d.name}</span><span class="mute">${num(d.cases)} · ${pct(d.share,0)}</span><span style="font-weight:600;min-width:90px;text-align:right">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):"CR "+pct(d.rate)}</span></div>`).join("");
+ const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
  const sp=r.tx_split;
  const sin=r.sinid;
- return `<section class="card" style="gap:16px"><h2>1. Contact rate y motivos de contacto</h2>
+ return `<section class="card" style="gap:16px"><h2>2. Contact rate y motivos de contacto</h2>
  <div class="note">Cada tipo de contact rate (transaccional y consultivo) se muestra separado por comprador y vendedor y, debajo, sus motivos de contacto. La cantidad de clusters surge de los datos. Cada verbatim va sin datos personales y con su número de caso de Salesforce.</div>
- <div style="display:flex;flex-wrap:wrap;align-items:center;gap:28px" class="inner">
-  <div style="position:relative;width:180px;height:180px;flex:none"><div role="img" aria-label="Distribución de casos por tipo de contact rate" style="width:180px;height:180px;border-radius:50%;background:conic-gradient(${stops})"></div>
-   <div style="position:absolute;top:34px;left:34px;width:112px;height:112px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:22px;font-weight:600">${num(r.ctx.cases)}</div><div class="small mute">casos analizados</div></div></div>
-  <div style="flex:1 1 340px;display:flex;flex-direction:column;gap:8px">
-   <div class="note">Cómo se reparten los casos entre los 4 tipos de contact rate (más intención de compra y un grupo sin segmento). El tamaño de la porción es volumen de casos; la tasa se lee en el valor. Transaccional: órdenes con contacto / órdenes. Consultivo: casos / usuarios registrados. Vendedores: volumen.</div>${leg}
-   <div class="small mute">Transaccional = ${num(sp.orden)} casos con orden asociada + ${num(sp.inferido)} inferidos por contenido (los inferidos cuentan en los casos pero no en la tasa por orden). Intención de compra = ${num(sp.intent)} casos de órdenes que expiraron sin pago (sección 6).</div>
-  </div></div>
+ <div class="inner">
+  <div class="note">Cómo se reparten los casos entre los 4 tipos de contact rate (más intención de compra y un grupo sin segmento). Transaccional: órdenes con contacto / órdenes. Consultivo de compradores: casos / usuarios registrados. Vendedores: volumen, no tasa.</div>
+  <div class="donutrow">
+   <div style="position:relative;width:180px;height:180px;flex:none"><div role="img" aria-label="Distribución de casos por tipo de contact rate" style="width:180px;height:180px;border-radius:50%;background:conic-gradient(${stops})"></div>
+    <div style="position:absolute;top:34px;left:34px;width:112px;height:112px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:22px;font-weight:600">${num(r.ctx.cases)}</div><div class="small mute">casos analizados</div></div></div>
+   <div class="scroll"><table class="dt"><thead><tr><th>Tipo de contacto</th><th>Casos</th><th>% del total</th><th>Contact rate</th></tr></thead><tbody>${leg}</tbody></table></div>
+  </div>
+  <div class="small mute">Transaccional = ${num(sp.orden)} casos con orden asociada + ${num(sp.inferido)} inferidos por contenido (los inferidos cuentan en los casos pero no en la tasa por orden). Intención de compra = ${num(sp.intent)} casos de órdenes que expiraron sin pago (sección 7).</div>
+ </div>
  ${crBlock(r,"tx")}${crBlock(r,"cons")}
  <div class="inner"><h3>Sin segmento: spam, casos vacíos y abandono</h3><div class="small mute">${num(sin.n)} casos que no se pueden atribuir a un comprador o vendedor; no entran en ningún contact rate.</div>
  ${sin.clusters.map(c=>`<div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>`).join("")}</div>
@@ -165,7 +215,7 @@ function s1(r){
 }
 function s2(r){
  const mx=Math.max(...r.channels.map(c=>c.pct));
- return `<section class="card"><h2>2. Canales de contacto</h2>
+ return `<section class="card"><h2>3. Canales de contacto</h2>
  <div class="note">% de casos por canal, aperturado por tipo de registro. El largo de la barra es el peso del canal. Incluye todos los casos analizados.</div>
  ${r.channels.map(c=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${pct(c.pct,0)} · ${num(c.n)} casos · predomina ${c.top.toLowerCase()}</span></div>
  <div style="display:flex;width:${(c.pct/mx*100).toFixed(1)}%;min-width:8px;height:14px;border-radius:5px;overflow:hidden;background:var(--track)"><div style="height:100%;width:${c.mix.Consulta*100}%;background:#2F6F8F"></div><div style="height:100%;width:${c.mix.Solicitud*100}%;background:#D9A441"></div><div style="height:100%;width:${c.mix.Reclamo*100}%;background:#C2410C"></div></div>
@@ -177,7 +227,7 @@ function s3(r){
  const names=Object.keys(mat).sort((a,b)=>mat[b].total.n-mat[a].total.n);
  const cell=c=>{ if(!c.n)return `<td style="padding:8px 6px;border-radius:6px" class="mute">—</td>`; const rt=c.rec/c.n; const al=Math.min(.6,rt*2.2);
    return `<td style="padding:8px 6px;border-radius:6px;background:rgba(194,65,12,${al.toFixed(2)})">${c.rec} · ${pct(rt,0)}<div class="small mute">de ${c.n}</div></td>`};
- return `<section class="card"><h2>3. Recontacto</h2>
+ return `<section class="card"><h2>4. Recontacto</h2>
  <div class="note">Mismo contacto y mismo motivo dentro de la ventana (misma orden si la hay); incluye reaperturas y casos hijos. Solo ${pct(X.qual.contact_id_cov,0)} de los casos trae algún dato para reconocer al contacto, así que la tasa es un piso.</div>
  <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><h3 style="font-size:15px">Motivo x tipo de registro: casos recontactados y tasa de recontacto</h3>
@@ -197,7 +247,7 @@ function s4(r){
   <div class="row" style="font-size:13px"><span><b>${num(x.contact_orders)}</b> órdenes con reclamo de envío ${when}</span><span style="font-weight:600">Contact rate ${pct(x.rate)}</span></div>
   <div class="small mute">${read}</div></div>`};
  const ratio=p.ratio==null?"n/d":dec(p.ratio,2)+"x";
- return `<section class="card"><h2>4. Cruce logístico: órdenes vs contactos por PDT</h2>
+ return `<section class="card"><h2>5. Cruce logístico: órdenes vs contactos por PDT</h2>
  <div class="note">PDT = promise delivery time (72 h = 3 días hábiles desde la creación, sin sábados, domingos ni feriados 15/08 y 29/09). Sobre el total de órdenes de cada grupo, cuántas generaron un reclamo de envío antes de vencer la promesa y cuántas después de vencida. Usa solo el archivo 3 (histórico desde el 17/07, el único con fechas de cada estado): ${num(r.ctx.orders_hist)} de las ${num(r.ctx.orders)} órdenes del período. Solo cuenta casos asociados a esas órdenes.</div>
  ${g("dentro","Contactos por órdenes dentro de PDT","antes de vencer la promesa","Expectativa o comunicación: el cliente consulta antes de que la promesa venza.")}
  ${g("fuera","Contactos por órdenes fuera de PDT","después de vencida la promesa","Logístico: la orden no llegó dentro de la promesa y el cliente reclama.")}
@@ -215,8 +265,8 @@ function s5(r){
  const st=Object.fromEntries(r.stages.map(s=>[s.name,s]));
  const off=["Cancelada","Devuelta al vendedor","Entrega fallida"];
  const u=r.stages_unplaced;
- return `<section class="card"><h2>5. Contactos por etapa de la orden</h2>
- <div class="note">Etapa de la orden al momento del contacto transaccional (estado vigente al mediodía de la fecha del caso). Primero el recorrido feliz y después las órdenes que salieron de él. Usa el historial de estados del archivo 3 (desde el 17/07). Se ubican ${num(r.stages_total)} contactos con orden; no se pudieron ubicar: ${num(u.inferidos)} inferidos por contenido (sin orden), ${num(u.orden_fuera_archivo3)} con orden sin historial de estados (anterior al 17/07) y ${num(u.sin_dato)} sin dato de etapa. Las órdenes expiradas (intención de compra) no tienen etapa y se analizan en la sección 6.</div>
+ return `<section class="card"><h2>6. Contactos por etapa de la orden</h2>
+ <div class="note">Etapa de la orden al momento del contacto transaccional (estado vigente al mediodía de la fecha del caso). Primero el recorrido feliz y después las órdenes que salieron de él. Usa el historial de estados del archivo 3 (desde el 17/07). Se ubican ${num(r.stages_total)} contactos con orden; no se pudieron ubicar: ${num(u.inferidos)} inferidos por contenido (sin orden), ${num(u.orden_fuera_archivo3)} con orden sin historial de estados (anterior al 17/07) y ${num(u.sin_dato)} sin dato de etapa. Las órdenes expiradas (intención de compra) no tienen etapa y se analizan en la sección 7.</div>
  ${hp.map(n=>stageRow(st[n],"#C2410C")).join("")}
  <h3 style="font-size:15px;margin-top:8px">Fuera del happy path</h3>
  ${off.map(n=>stageRow(st[n],"#7A7770")).join("")}</section>`;
@@ -225,7 +275,7 @@ function s6(r){
  const i=r.intencion;
  const tbl=(title,rows)=>`<div><h4>${title}</h4><div class="scroll"><table style="min-width:420px"><thead><tr><th>${title.replace("Por ","")}</th><th>Creadas</th><th>Expiradas</th><th>% expiradas</th></tr></thead><tbody>${rows.map(x=>`<tr><td style="font-weight:600">${esc(x.name)}</td><td>${num(x.creadas)}</td><td>${num(x.expiradas)}</td><td>${pct(x.pct,0)}</td></tr>`).join("")}</tbody></table></div></div>`;
  const gs=v=>v==null?"n/d":"Gs "+(v/1e9).toFixed(1).replace(".",",")+" mil millones";
- return `<section class="card"><h2>6. Intención de compra: órdenes expiradas (análisis aparte)</h2>
+ return `<section class="card"><h2>7. Intención de compra: órdenes expiradas (análisis aparte)</h2>
  <div class="note">Una orden expirada es una compra que se inició y nunca se pagó. Se separa del análisis de CX poscompra: no entra en el contact rate transaccional ni en las etapas de la orden. Fuente: archivo puente (cubre desde el 01/07 hasta el 13/10), no el archivo 3. Los casos asociados a una orden expirada se agrupan como «intención de compra».</div>
  <div class="grid4">
   <div class="kpi"><div class="note">Órdenes creadas</div><div class="v">${num(i.creadas)}</div><div class="small mute">Todas las del puente en el período</div></div>
@@ -236,7 +286,7 @@ function s6(r){
  <div class="two">${tbl("Por medio de pago",i.medio)}${tbl("Por pasarela",i.pasarela)}</div>
  <div class="inner"><div class="row"><span style="font-weight:600">Contacto sobre órdenes expiradas</span><span>${num(i.orders_contact)} de ${num(i.expiradas)} órdenes · ${pct(i.rate_contact,2)}</span></div>
  <div class="small mute">${num(i.cases_scope)} casos de Salesforce quedan asociados a una orden expirada. Es una cota baja: la mayoría de las intenciones fallidas no llama.</div>
- ${i.clusters.length?`<div style="display:flex;flex-direction:column;gap:12px">${i.clusters.map(c=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>${c.quotes.map(q=>`<div class="quote">“${esc(q.text)}” · Caso ${q.id}</div>`).join("")}</div>`).join("")}</div>`:'<div class="small mute">Sin casos en este período.</div>'}
+ ${i.clusters.length?`<div style="display:flex;flex-direction:column;gap:12px">${i.clusters.map(c=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>${quotesBlock(c.quotes,S.scope+"|int|"+c.name)}</div>`).join("")}</div>`:'<div class="small mute">Sin casos en este período.</div>'}
  <details><summary class="small" style="cursor:pointer">Números de caso (${num(i.cases.length)})</summary><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${i.cases.map(c=>`<span class="chip">${c}</span>`).join("")}</div></details></div></section>`;
 }
 function reading(){
@@ -280,7 +330,7 @@ function base(){
  <section class="card"><h2>Calidad de los datos y puntos a confirmar</h2>
  <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.6">
  <li><b>El archivo 3 es histórico y arranca el 17/07</b> (no se puede modificar), por eso el universo de órdenes y el contact rate salen del archivo 2 (${num(X.qual.orders_universe)} órdenes pagadas desde el 01/07, incluidas las 21 más recientes que todavía no están en el puente). Etapas de la orden y promesa de entrega (PDT) usan solo el archivo 3 (${num(X.qual.orders_hist)} órdenes) porque el archivo 2 solo trae el estado actual, sin fechas por estado.</li>
- <li><b>Órdenes expiradas:</b> el puente trae ${num(X.qual.orders_total_puente)} órdenes únicas desde marzo, de las cuales ${num(X.qual.orders_expired_puente)} están expiradas (nunca pagadas). No entran al universo de órdenes: se analizan aparte en la sección 6 (cubren hasta el 13/10).</li>
+ <li><b>Órdenes expiradas:</b> el puente trae ${num(X.qual.orders_total_puente)} órdenes únicas desde marzo, de las cuales ${num(X.qual.orders_expired_puente)} están expiradas (nunca pagadas). No entran al universo de órdenes: se analizan aparte en la sección 7 (cubren hasta el 13/10).</li>
  <li><b>Base del consultivo:</b> el contact rate consultivo de compradores se mide sobre usuarios <b>registrados</b> (779 acumulados y los registrados mensuales informados). Subestima el denominador real porque consultan también personas que todavía no se registraron. En vendedores se informa <b>volumen</b>, no tasa: ${num(R.all.clusters.cons.Vendedores.filter(c=>/Alta|Migraci/.test(c.name)).reduce((a,c)=>a+c.n,0))} de los ${num(R.all.cr.cons.Vendedores.num)} casos son prospectos o ex-vendedores de Hendyla, que no están registrados.</li>
  <li><b>${num(X.qual.spam)} casos de spam y publicidad</b> (capacitaciones, Meta Verified, proveedores internacionales) y <b>${num(X.qual.sin_contenido_nobot)} casos vacíos o sin contenido</b> de otros canales siguen en la base, en el grupo «sin segmento», porque no estaban en las listas de limpieza. Se sugiere sumar palabras clave para el próximo reporte.</li>
  <li><b>Camisetas y remeras:</b> se descartaron ${num(X.funnel.by["Campaña ajena (camisetas selección)"])} casos de la campaña de la selección: ${num(X.qual.camp_explicitos)} dicen explícitamente selección, Paraguay o albirroja, ${num(X.qual.camp_retiro)} son retiros de camiseta o remera en centros de experiencia, ${num(X.qual.camp_generico)} hablan de camiseta o remera (entrega, cancelación, cambio) sin decir de cuál y ${num(X.qual.camp_enlace)} se vinculan por caso u orden. Los ${num(X.qual.camp_retiro+X.qual.camp_generico)} que no lo dicen expresamente se <b>asumieron</b> de la campaña. Quedan en la base los casos del Rally y los de camisetas de clubes, identificados por el producto de la orden.</li>
@@ -296,6 +346,7 @@ function base(){
 function render(){
  document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():base());
 }
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("vb"))S.vb[d.dataset.k]=d.open;},true);
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-act]");if(!b)return;
  const a=b.dataset.act,v=b.dataset.v,y=window.scrollY;
