@@ -52,6 +52,40 @@ button{font-family:inherit}
 </sc-for>
 </div>
 
+<section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">Evolución semanal: órdenes vs casos</h2>
+<div style="font-size: 13px; color: #5E5D59">Órdenes creadas, casos transaccionales y casos consultivos por semana. Las órdenes van en el eje izquierdo y los casos en el derecho, para que las tres líneas se puedan comparar en forma. La última semana puede estar incompleta (*).</div>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 660 250" role="img" aria-label="Líneas semanales de órdenes creadas, casos transaccionales y casos consultivos" style="width: 100%; min-width: 520px; height: auto; display: block">
+<g stroke="#E5E2D8" stroke-width="1">
+<line x1="60" y1="30" x2="600" y2="30"/><line x1="60" y1="80" x2="600" y2="80"/><line x1="60" y1="130" x2="600" y2="130"/><line x1="60" y1="180" x2="600" y2="180"/>
+</g>
+<g font-size="11" fill="#5E5D59" text-anchor="end">
+<text x="52" y="34">[máx]</text><text x="52" y="184">0</text>
+</g>
+<g font-size="11" fill="#5E5D59" text-anchor="start">
+<text x="608" y="34">[máx]</text><text x="608" y="184">0</text>
+</g>
+<text x="52" y="16" font-size="11" fill="#5E5D59" text-anchor="end">Órdenes</text>
+<text x="608" y="16" font-size="11" fill="#5E5D59" text-anchor="start">Casos</text>
+<g font-size="11" fill="#5E5D59" text-anchor="middle">
+<text x="90" y="202">S1</text><text x="198" y="202">S2</text><text x="306" y="202">S3</text><text x="414" y="202">S4</text><text x="522" y="202">S5</text><text x="600" y="202">S6*</text>
+</g>
+<polyline points="90,70 198,58 306,52 414,64 522,48 600,44" fill="none" stroke="#5E5D59" stroke-width="2.5" stroke-dasharray="6 4"/>
+<polyline points="90,128 198,120 306,124 414,112 522,116 600,108" fill="none" stroke="#C2410C" stroke-width="2.5"/>
+<polyline points="90,152 198,148 306,154 414,146 522,150 600,144" fill="none" stroke="#2F6F8F" stroke-width="2.5"/>
+<g fill="#5E5D59"><circle cx="90" cy="70" r="3.5"/><circle cx="198" cy="58" r="3.5"/><circle cx="306" cy="52" r="3.5"/><circle cx="414" cy="64" r="3.5"/><circle cx="522" cy="48" r="3.5"/><circle cx="600" cy="44" r="3.5"/></g>
+<g fill="#C2410C"><circle cx="90" cy="128" r="3.5"/><circle cx="198" cy="120" r="3.5"/><circle cx="306" cy="124" r="3.5"/><circle cx="414" cy="112" r="3.5"/><circle cx="522" cy="116" r="3.5"/><circle cx="600" cy="108" r="3.5"/></g>
+<g fill="#2F6F8F"><circle cx="90" cy="152" r="3.5"/><circle cx="198" cy="148" r="3.5"/><circle cx="306" cy="154" r="3.5"/><circle cx="414" cy="146" r="3.5"/><circle cx="522" cy="150" r="3.5"/><circle cx="600" cy="144" r="3.5"/></g>
+</svg>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #5E5D59">
+<span><span style="display: inline-block; width: 18px; height: 0; border-top: 3px dashed #5E5D59; margin-right: 6px; vertical-align: middle"></span>Órdenes creadas (eje izq.)</span>
+<span><span style="display: inline-block; width: 18px; height: 3px; background: #C2410C; margin-right: 6px; vertical-align: middle"></span>Casos transaccionales (eje der.)</span>
+<span><span style="display: inline-block; width: 18px; height: 3px; background: #2F6F8F; margin-right: 6px; vertical-align: middle"></span>Casos consultivos (eje der.)</span>
+</div>
+</section>
+
 <sc-if value="{{showMonth}}" hint-placeholder-val="{{ false }}">
 <section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
 <h2 style="margin: 0; font-size: 20px">Mes a mes</h2>
@@ -230,8 +264,16 @@ button{font-family:inherit}
 
 <section style="background: #FFFFFF; border: 1px solid #E5E2D8; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
 <h2 style="margin: 0; font-size: 20px">5. Contactos por etapa de la orden</h2>
-<div style="font-size: 13px; color: #5E5D59">Etapa de la orden al momento del contacto transaccional.</div>
+<div style="font-size: 13px; color: #5E5D59">Etapa de la orden al momento del contacto transaccional. Primero el recorrido feliz (happy path) y después las órdenes que salieron de ese recorrido.</div>
 <sc-for list="{{stages}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{s.name}}</span><span>{{s.n}} · {{s.pct}} · {{s.per100}} c/100 órd.</span></div>
+<div style="height: 10px; background: #EDEBE3; border-radius: 5px"><div style="{{s.bar}}"></div></div>
+<div style="font-size: 12px; color: #5E5D59">Predomina {{s.top}} · motivo principal: {{s.reason}}</div>
+</div>
+</sc-for>
+<h3 style="margin: 8px 0 0; font-size: 15px">Fuera del happy path</h3>
+<sc-for list="{{stagesOff}}" as="s" hint-placeholder-count="2">
 <div style="display: flex; flex-direction: column; gap: 4px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{s.name}}</span><span>{{s.n}} · {{s.pct}} · {{s.per100}} c/100 órd.</span></div>
 <div style="height: 10px; background: #EDEBE3; border-radius: 5px"><div style="{{s.bar}}"></div></div>
@@ -452,6 +494,11 @@ class Component extends DCLogic {
         { name: 'En tránsito', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(34) },
         { name: 'Entregada', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(18) }
       ],
+      stagesOff: [
+        { name: 'Cancelada', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[solicitud]', reason: '[motivo]', bar: bar(16, '#7A7770') },
+        { name: 'Devuelta al vendedor', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[reclamo]', reason: '[motivo]', bar: bar(8, '#7A7770') },
+        { name: '[Otro estado]', n: '[000]', pct: '[00%]', per100: '[0,0]', top: '[consulta]', reason: '[motivo]', bar: bar(4, '#7A7770') }
+      ],
       funnel: [
         { name: 'Casos originales', n: '[0.000]', pct: '100%', note: 'Export de Salesforce completo', bar: bar(100, '#7A7770') },
         { name: 'Descartados: prueba o modo test', n: '[000]', pct: '[0%]', note: 'Primer motivo aplicado', bar: bar(6) },
@@ -464,6 +511,7 @@ class Component extends DCLogic {
         { name: 'Por cédula', n: '[000]', pct: '[00%]' },
         { name: 'Por email', n: '[000]', pct: '[00%]' },
         { name: 'Por nombre del cliente', n: '[000]', pct: '[00%]' },
+        { name: 'Inferido como transaccional por el contenido del caso (sin order ID)', n: '[000]', pct: '[00%]' },
         { name: 'Sin orden asociada (consultivo)', n: '[000]', pct: '[00%]' }
       ],
       keywords: [
