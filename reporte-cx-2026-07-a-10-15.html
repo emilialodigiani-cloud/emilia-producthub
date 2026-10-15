@@ -89,6 +89,9 @@ tbody tr{border-top:1px solid var(--line)}
 #tip .k i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .bar.st{display:flex}
 .bar.st>i{border-radius:0;min-width:3px}
+.cl3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.tcol{display:flex;flex-direction:column;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+@media (max-width:900px){.cl3{grid-template-columns:minmax(0,1fr)}}
 .cl2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 32px}
 @media (max-width:760px){.cl2{grid-template-columns:minmax(0,1fr)}}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--mute)}
@@ -102,7 +105,7 @@ const D={"R": {"all": {"scope": "all", "label": "Período completo", "ctx": {"bu
 const R=D.R, X=D.X;
 const TIPOS=["Consulta","Solicitud","Reclamo"];
 const SCOPES=[["all","Período completo"],["2026-07","Julio"],["2026-08","Agosto"],["2026-09","Septiembre"],["2026-10","Octubre *"]];
-const S={tab:"kpi",scope:"all",win:"7",open:{},vb:{}};
+const S={tab:"kpi",scope:"all",win:"7",open:{},vb:{},mview:"motivo"};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pct=(x,d=1)=>x==null?"n/d":(x*100).toFixed(d).replace(".",",")+"%";
 const num=x=>x==null?"n/d":Number(x).toLocaleString("es-AR");
@@ -195,6 +198,13 @@ function clusterGroup(title,items,color,kp){
   <div class="small mute" style="font-size:11px">${TIPOS.filter(tp=>it.mix[tp]).map(tp=>`${tp} ${it.mix[tp]}`).join(" · ")}</div>
   ${quotesBlock(it.quotes,kp+"|"+it.name)}</div>`).join("")}</div></div>`;
 }
+function clusterGroupTipo(title,items){
+ const cols=TIPOS.map(tp=>{
+  const arr=items.filter(i=>i.mix[tp]>0).sort((a,b)=>b.mix[tp]-a.mix[tp]);
+  const tot=arr.reduce((s,i)=>s+i.mix[tp],0);
+  return `<div class="tcol"><div class="row" style="font-weight:600"><span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:8px"></span>${tp}</span><span>${num(tot)} ${tot===1?"caso":"casos"}</span></div>${tot?arr.map(i=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row" style="font-size:13px;flex-wrap:nowrap;align-items:flex-start"><span style="min-width:0">${esc(i.name)}</span><span style="white-space:nowrap">${num(i.mix[tp])} · ${pct(i.mix[tp]/tot,0)}</span></div><div class="bar"><i style="width:${(i.mix[tp]/tot*100).toFixed(1)}%;min-width:3px;background:${TCOL[tp]}"></i></div></div>`).join(""):'<div class="small mute">Sin casos</div>'}</div>`}).join("");
+ return `<div style="display:flex;flex-direction:column;gap:14px"><h4>Motivos · ${title} · por tipo de registro</h4><div class="small mute">Cada columna reparte los casos de ese tipo entre los motivos (el 100% de la barra son todos los casos del tipo).</div><div class="cl3">${cols}</div></div>`;
+}
 function mixCell(m,tot){return TIPOS.map(t=>`<td>${tot?pct(m[t]/tot,0):"—"} <span class="small mute">(${m[t]})</span></td>`).join("")}
 function sellerNote(r){
  const cl=r.clusters.cons.Vendedores||[];const tot=cl.reduce((a,c)=>a+c.n,0);
@@ -212,7 +222,7 @@ function crBlock(r,kind){
   if(c.rate==null)return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${num(tot)} ${tot===1?"caso":"casos"}</td><td class="mute">volumen; no se mide como tasa</td>${mixCell(c.mix,tot)}</tr>`;
   return `<tr><td style="font-weight:600">${s}</td><td style="font-weight:600">${pct(c.rate)}</td><td class="mute">${num(c.num)} / ${num(c.den)} ${isTx?"órdenes":(s==="Compradores"?"compradores registrados":"vendedores registrados")}${isTx?"":`<div class="small">sobre activos: ${pct(c.rate_act)} (${num(c.num)} / ${num(c.den_act)})</div>`}</td>${mixCell(c.mix,tot)}</tr>`}).join("");
  const segs=["Compradores","Vendedores"].filter(s=>(r.clusters[kind][s]||[]).reduce((x,c)=>x+c.n,0)>=3);
- const grp=(segs.length?segs:["Compradores"]).map(s=>clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"var(--c-pri)":"var(--c-sec)",S.scope+"|"+kind+"|"+s)).join("");
+ const grp=(segs.length?segs:["Compradores"]).map(s=>S.mview==="tipo"?clusterGroupTipo(s,r.clusters[kind][s]||[]):clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"var(--c-pri)":"var(--c-sec)",S.scope+"|"+kind+"|"+s)).join("");
  return `<div class="inner"><div><h3>${title}</h3><div class="small mute">${def}</div></div>
  <div class="scroll"><table style="min-width:660px"><thead><tr><th>Segmento</th><th>Contact rate</th><th>Num. / Den.</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th></tr></thead><tbody>${rows}</tbody></table></div>
  <div class="small mute">% de tipo de registro sobre los casos del segmento ${isTx?"asociados a orden":"consultivos"} (entre paréntesis, cantidad de casos).</div>${isTx?"":sellerNote(r)}
@@ -239,6 +249,7 @@ function s1(r){
   </div>
   <div class="small mute">Transaccional = ${num(sp.orden)} casos con orden asociada + ${num(sp.inferido)} inferidos por contenido (los inferidos cuentan en los casos pero no en la tasa por orden). Intención de compra = ${num(sp.intent)} casos de órdenes que expiraron sin pago (sección 7).</div>
  </div>
+ <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><span class="mute" style="font-size:14px">Ver motivos:</span><div class="seg" role="group" aria-label="Vista de motivos"><button data-act="mview" data-v="motivo" class="${S.mview==="motivo"?"on":""}">Por motivo</button><button data-act="mview" data-v="tipo" class="${S.mview==="tipo"?"on":""}">Por tipo de registro</button></div></div>
  ${crBlock(r,"tx")}${crBlock(r,"cons")}
  <div class="inner"><h3>Sin segmento: spam, casos vacíos y abandono</h3><div class="small mute">${num(sin.n)} casos que no se pueden atribuir a un comprador o vendedor; no entran en ningún contact rate.</div>
  ${sin.clusters.map(c=>`<div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>`).join("")}</div>
@@ -395,7 +406,7 @@ document.addEventListener("pointerout",e=>{if(!e.relatedTarget)tip.style.display
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-act]");if(!b)return;
  const a=b.dataset.act,v=b.dataset.v,y=window.scrollY;
- if(a==="tab")S.tab=v; else if(a==="scope")S.scope=v; else if(a==="win")S.win=v; else if(a==="open"){const k=v+S.scope;S.open[k]=!S.open[k]}
+ if(a==="tab")S.tab=v; else if(a==="mview")S.mview=v; else if(a==="scope")S.scope=v; else if(a==="win")S.win=v; else if(a==="open"){const k=v+S.scope;S.open[k]=!S.open[k]}
  render();window.scrollTo(0,y);
 });
 render();
