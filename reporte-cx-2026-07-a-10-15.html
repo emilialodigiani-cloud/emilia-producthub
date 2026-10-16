@@ -70,6 +70,7 @@ tbody tr{border-top:1px solid var(--line)}
 .pill{font-size:13px;font-weight:500;background:var(--warn-bg);color:var(--warn);padding:5px 12px;border-radius:999px}
 .quote{font-size:13px;color:var(--mute);margin-top:6px;padding-left:10px;border-left:2px solid var(--c-pri-l)}
 .vb{font-size:12px}
+.acc>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none}.acc>summary::-webkit-details-marker{display:none}.acc>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(-45deg);transition:transform .15s;margin-right:4px;flex:none}.acc[open]>summary::after{transform:rotate(45deg)}.acc>summary:focus-visible{outline:2px solid var(--pri);outline-offset:4px;border-radius:6px}.acc[open]>summary{margin-bottom:6px}.acc{gap:8px}
 .qm{display:inline-block;font-style:normal;font-weight:600;color:var(--ink);font-size:12px;white-space:nowrap}
 .vb>summary{cursor:pointer;color:var(--mute);font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:6px;padding:2px 0;user-select:none}
 .vb>summary::-webkit-details-marker{display:none}
@@ -369,8 +370,9 @@ function s1(r){
  </div>
  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><span class="mute" style="font-size:14px">Ver motivos:</span><div class="seg" role="group" aria-label="Vista de motivos"><button data-act="mview" data-v="motivo" class="${S.mview==="motivo"?"on":""}">Por motivo</button><button data-act="mview" data-v="tipo" class="${S.mview==="tipo"?"on":""}">Por tipo de registro</button></div></div>
  ${crBlock(r,"tx")}${crBlock(r,"cons")}
- <div class="inner"><h3>Sin segmento: spam, casos vacíos y abandono</h3><div class="small mute">${num(sin.n)} casos que no se pueden atribuir a un comprador o vendedor; no entran en ningún Contact Rate.</div>
- ${sin.clusters.map(c=>`<div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>`).join("")}</div>
+ <details class="inner acc" data-k="sinseg"${S.vb.sinseg?" open":""}><summary><h3>Sin segmento: spam, casos vacíos y abandono (${num(sin.n)})</h3></summary>
+ <div class="small mute">${num(sin.n)} casos que no se pueden atribuir a un comprador o vendedor; no entran en ningún Contact Rate.</div>
+ <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">${sin.clusters.map(c=>`<div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>`).join("")}</div></details>
  </section>`;
 }
 function s2(r){
@@ -508,7 +510,7 @@ function render(){
  tip.style.display="none";
  document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():base());
 }
-document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("vb"))S.vb[d.dataset.k]=d.open;},true);
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&(d.classList.contains("vb")||d.classList.contains("acc")))S.vb[d.dataset.k]=d.open;},true);
 const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","tooltip");document.body.appendChild(tip);
 const LIM=24;
 const idList=a=>a.slice(0,LIM).join(", ")+(a.length>LIM?` … +${a.length-LIM} más`:"");
