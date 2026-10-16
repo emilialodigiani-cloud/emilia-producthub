@@ -426,8 +426,10 @@ function s4(r){
  const ratio=p.ratio==null?"n/d":dec(p.ratio,2)+"x";
  return `<section class="card">${cardTitle("pdt","5. Cruce logístico: órdenes vs contactos por PDT")}
  <div class="note">PDT = promise delivery time (72 h = 3 días hábiles desde la creación, sin sábados, domingos ni feriados 15/08 y 29/09). Sobre el total de órdenes de cada grupo, cuántas generaron un reclamo de envío antes de vencer la promesa y cuántas después de vencida. Usa solo el archivo 3 (histórico desde el 17/07, el único con fechas de cada estado): ${num(r.ctx.orders_hist)} de las ${num(r.ctx.orders)} órdenes del período. Solo cuenta casos asociados a esas órdenes.</div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
  ${g("dentro","Contactos por órdenes dentro de PDT","antes de vencer la promesa","Expectativa o comunicación: el cliente consulta antes de que la promesa venza.")}
  ${g("fuera","Contactos por órdenes fuera de PDT","después de vencida la promesa","Logístico: la orden no llegó dentro de la promesa y el cliente reclama.")}
+ </div>
  <div class="legend"><span><span class="dot" style="background:var(--c-alert);width:10px;height:10px;margin-right:6px"></span>Órdenes con reclamo de envío</span><span><span class="dot" style="background:var(--track2);width:10px;height:10px;margin-right:6px"></span>Órdenes sin reclamo</span></div>
  <div style="font-size:14px;background:var(--soft);border-radius:8px;padding:10px 12px">Fuera de PDT el Contact Rate es <b>${ratio}</b> el de dentro de PDT. Una brecha grande apunta a problema logístico; una brecha chica, a comunicación o producto. ${p.excl?`<span class="mute">(${p.excl} órdenes canceladas antes de vencer la promesa quedan fuera de ambos grupos.)</span>`:""}</div></section>`;
 }
