@@ -107,7 +107,7 @@ tbody tr{border-top:1px solid var(--line)}
 .insight .ihd{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
 .insight ul{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 .insight li{margin:3px 0}
-.howto{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.55}
+.qbtn{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12px/1 inherit;cursor:pointer;flex:none;padding:0}.qbtn.on{background:var(--c-pri);color:#fff;border-color:var(--c-pri)}.howto{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.55}
 [data-hv]{cursor:default}
 .slice{cursor:default;transition:opacity .15s}
 .slice:hover{opacity:.82}
@@ -122,7 +122,7 @@ const D={"R": {"all": {"scope": "all", "label": "Período completo", "ctx": {"bu
 const R=D.R, X=D.X;
 const TIPOS=["Consulta","Solicitud","Reclamo"];
 const SCOPES=[["all","Período completo"],["2026-07","Julio"],["2026-08","Agosto"],["2026-09","Septiembre"],["2026-10","Octubre *"]];
-const S={tab:"kpi",scope:"all",win:"7",open:{},vb:{},mview:"motivo",ins:{},insAll:false};
+const S={tab:"kpi",scope:"all",win:"7",open:{},vb:{},mview:"motivo",ins:{},insAll:false,how:false};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pct=(x,d=1)=>x==null?"n/d":(x*100).toFixed(d).replace(".",",")+"%";
 const num=x=>x==null?"n/d":Number(x).toLocaleString("es-AR");
@@ -406,9 +406,9 @@ function s3(r){
  return `<section class="card">${cardTitle("rec","4. Recontacto")}
  <div class="note">Mismo contacto y mismo motivo dentro de la ventana (misma orden si la hay); incluye reaperturas y casos hijos. Solo ${pct(X.qual.contact_id_cov,0)} de los casos trae algún dato para reconocer al contacto, así que la tasa es un piso.</div>
  <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" ${hv(l+" (casos recontactados)",CASES.filter(c=>inS(c)&&(c.r&RBIT[k])))} style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
- <div class="howto"><b>Cómo leer esta tabla.</b> Cada fila es un motivo de contacto y cada columna un tipo de registro. En cada celda, el primer número son los casos que volvieron a contactar por lo mismo dentro de ${S.win} días; el porcentaje es esa cantidad sobre todos los casos de ese motivo y tipo (el «de N» de abajo).${ex?` Ejemplo: en «${esc(ex.n)}» · ${ex.tp}, ${ex.rec} de ${ex.nn} casos (${pct(ex.rt,0)}) tuvieron un recontacto.`:""} Cuanto más oscura la celda, mayor la tasa; una tasa alta sobre pocos casos pesa menos que una baja sobre muchos. Pasá el mouse sobre una celda para ver los números de caso.</div>
- <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><h3 style="font-size:15px">Motivo x tipo de registro: casos recontactados y tasa de recontacto</h3>
+ <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><h3 style="font-size:15px;display:flex;align-items:center;gap:8px">Motivo x tipo de registro: casos recontactados y tasa de recontacto<button class="qbtn${S.how?" on":""}" data-act="how" aria-expanded="${!!S.how}" aria-label="Cómo leer esta tabla" title="Cómo leer esta tabla">?</button></h3>
  <div class="seg">${["3","7","14"].map(w=>`<button data-act="win" data-v="${w}" class="${S.win===w?"on":""}">${w} días</button>`).join("")}</div></div>
+ ${S.how?`<div class="howto"><b>Cómo leer esta tabla.</b> Cada fila es un motivo de contacto y cada columna un tipo de registro. En cada celda, el primer número son los casos que volvieron a contactar por lo mismo dentro de ${S.win} días; el porcentaje es esa cantidad sobre todos los casos de ese motivo y tipo (el «de N» de abajo).${ex?` Ejemplo: en «${esc(ex.n)}» · ${ex.tp}, ${ex.rec} de ${ex.nn} casos (${pct(ex.rt,0)}) tuvieron un recontacto.`:""} Cuanto más oscura la celda, mayor la tasa; una tasa alta sobre pocos casos pesa menos que una baja sobre muchos. Pasá el mouse sobre una celda para ver los números de caso.</div>`:""}
  <div class="small mute">Ventana: ${S.win} días. Cada celda: casos recontactados · tasa = recontactados / casos de ese motivo y tipo. Más oscuro = tasa más alta. Solo se muestran los motivos con al menos un recontacto${hid?` (${hid} motivos sin recontacto no se listan)`:""}.</div>
  <div class="scroll"><table style="border-collapse:separate;border-spacing:4px;min-width:640px"><thead><tr><th>Motivo</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th><th>Total motivo</th></tr></thead><tbody>
  ${names.map(n=>{const m=mat[n];return `<tr><td style="font-weight:600;padding:8px 6px">${esc(n)}</td>${cell(m.Consulta,n,"Consulta")}${cell(m.Solicitud,n,"Solicitud")}${cell(m.Reclamo,n,"Reclamo")}<td ${hv("Recontactados · "+n,recIds(n))} style="font-weight:600;padding:8px 6px">${m.total.rec} · ${pct(m.total.n?m.total.rec/m.total.n:null,0)}<div class="small mute" style="font-weight:400">de ${m.total.n}</div></td></tr>`}).join("")}
@@ -564,7 +564,7 @@ document.addEventListener("pointerout",e=>{if(!e.relatedTarget)tip.style.display
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-act]");if(!b)return;
  const a=b.dataset.act,v=b.dataset.v,y=window.scrollY;
- if(a==="tab")S.tab=v; else if(a==="mview")S.mview=v; else if(a==="ins"){if(S.insAll){S.insAll=false;Object.keys(INS).forEach(k=>{S.ins[k]=(k!==v)})}else S.ins[v]=!S.ins[v]} else if(a==="insall"){S.insAll=!S.insAll;if(!S.insAll)S.ins={}} else if(a==="scope")S.scope=v; else if(a==="win")S.win=v; else if(a==="open"){const k=v+S.scope;S.open[k]=!S.open[k]}
+ if(a==="tab")S.tab=v; else if(a==="mview")S.mview=v; else if(a==="ins"){if(S.insAll){S.insAll=false;Object.keys(INS).forEach(k=>{S.ins[k]=(k!==v)})}else S.ins[v]=!S.ins[v]} else if(a==="how")S.how=!S.how; else if(a==="insall"){S.insAll=!S.insAll;if(!S.insAll)S.ins={}} else if(a==="scope")S.scope=v; else if(a==="win")S.win=v; else if(a==="open"){const k=v+S.scope;S.open[k]=!S.open[k]}
  render();window.scrollTo(0,y);
 });
 render();
