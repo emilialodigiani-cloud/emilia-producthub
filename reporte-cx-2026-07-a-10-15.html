@@ -16,7 +16,7 @@ button{font-family:inherit}
 .wrap{max-width:1200px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:28px}
 h1{margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.04;font-weight:800;letter-spacing:-.025em;text-wrap:balance} h2{margin:0;font-size:21px;line-height:1.2;font-weight:600;letter-spacing:-.02em} h3{margin:0;font-size:17px;line-height:1.2;font-weight:600;letter-spacing:-.02em} h4{margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em}
 .ov{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px}
-.mute{color:var(--mute)} .small{font-size:12px} .note{font-size:13px;color:var(--mute)}
+.mute{color:var(--mute)} .small{font-size:10px} .note{font-size:11px;color:var(--mute)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px}
 .inner{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
 .seg{display:flex;gap:4px;background:var(--track);padding:4px;border-radius:999px;flex-wrap:wrap}
@@ -107,7 +107,7 @@ tbody tr{border-top:1px solid var(--line)}
 .insight .ihd{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
 .insight ul{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 .insight li{margin:3px 0}
-.qbtn{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12px/1 inherit;cursor:pointer;flex:none;padding:0}.qbtn.on{background:var(--c-pri);color:#fff;border-color:var(--c-pri)}.howto{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.55}
+.qbtn{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12px/1 inherit;cursor:pointer;flex:none;padding:0}.qbtn.on{background:var(--c-pri);color:#fff;border-color:var(--c-pri)}.howto{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:11px;line-height:1.55}
 [data-hv]{cursor:default}
 .slice{cursor:default;transition:opacity .15s}
 .slice:hover{opacity:.82}
@@ -305,7 +305,7 @@ function clusterGroup(title,items,color,kp,kind,sc){
  return `<div style="display:flex;flex-direction:column;gap:14px"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 18px"><h4>Motivos · ${title}</h4><div class="legend">${TIPOS.map(tp=>`<span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:6px"></span>${tp}</span>`).join("")}</div></div><div class="cl2">${items.map(it=>`<div style="display:flex;flex-direction:column;gap:4px">
   <div class="row"><span style="font-weight:600">${esc(it.name)}</span><span>${num(it.n)} · ${pct(it.pct,0)}</span></div>
   <div class="bar st">${TIPOS.map(tp=>it.mix[tp]?`<i ${hv(it.name+" · "+tp,idsF(it.name,tp))} style="width:${(it.pct*100*it.mix[tp]/it.n).toFixed(2)}%;background:${TCOL[tp]}"></i>`:"").join("")}</div>
-  <div class="small mute" style="font-size:11px">${TIPOS.filter(tp=>it.mix[tp]).map(tp=>`${tp} ${it.mix[tp]}`).join(" · ")}</div>
+  <div class="small mute" style="font-size:10px">${TIPOS.filter(tp=>it.mix[tp]).map(tp=>`${tp} ${it.mix[tp]}`).join(" · ")}</div>
   ${quotesBlock(it.quotes,kp+"|"+it.name)}</div>`).join("")}</div></div>`;
 }
 function clusterGroupTipo(title,items,kind,sc){
@@ -434,7 +434,7 @@ function stageRow(s,color){
  return `<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${s.name}</span><span>${num(s.n)} · ${pct(s.pct,0)} · ${s.per100==null?"n/d":dec(s.per100)} c/100 órd.</span></div>
  <div class="bar l st">${tp(cs).map(([tt,a])=>`<i ${hv(s.name+" · "+tt,a)} style="width:${(s.pct*100*a.length/(cs.length||1)).toFixed(2)}%;background:${TCOL[tt]}"></i>`).join("")}</div>
  <div class="small mute">${s.n?tp(cs).map(([tt,a])=>`${tt} ${a.length}`).join(" · ")+` · compradores ${s.buyers}, vendedores ${s.sellers}${s.other?", sin segmento "+s.other:""}`:"Sin contactos"}${s.orders_pass==null?"":` · ${num(s.orders_pass)} órdenes pasaron por la etapa`}</div>
- ${ms.length?`<details class="vb" data-k="${esc(key)}"${S.vb[key]?" open":""}><summary>Ver motivos (${ms.length})</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${ms.map(([n,a])=>`<div><div class="row" style="font-size:13px;flex-wrap:nowrap"><span style="min-width:0">${esc(n)}</span><span style="white-space:nowrap"><b>${num(a.length)}</b> · ${pct(a.length/cs.length,0)}</span></div><div class="small mute" style="font-size:11px;display:flex;gap:10px;flex-wrap:wrap">${tp(a).map(([tt,b])=>`<span><i class="dot" style="background:${TCOL[tt]};width:8px;height:8px;margin-right:4px"></i>${tt} ${b.length}</span>`).join("")}</div></div>`).join("")}</div></details>`:""}</div>`;
+ ${ms.length?`<details class="vb" data-k="${esc(key)}"${S.vb[key]?" open":""}><summary>Ver motivos (${ms.length})</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${ms.map(([n,a])=>`<div><div class="row" style="font-size:13px;flex-wrap:nowrap"><span style="min-width:0">${esc(n)}</span><span style="white-space:nowrap"><b>${num(a.length)}</b> · ${pct(a.length/cs.length,0)}</span></div><div class="small mute" style="font-size:10px;display:flex;gap:10px;flex-wrap:wrap">${tp(a).map(([tt,b])=>`<span><i class="dot" style="background:${TCOL[tt]};width:8px;height:8px;margin-right:4px"></i>${tt} ${b.length}</span>`).join("")}</div></div>`).join("")}</div></details>`:""}</div>`;
 }
 function s5(r){
  const hp=["Pagada","Preparando","Lista para retirar","En tránsito","Entregada"];
