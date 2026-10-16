@@ -41,9 +41,12 @@ h1{margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.04;font-weight:800;le
 .bar.l{height:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 .mt{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
-.donutrow{display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px;align-items:center}
+.donutrow{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;align-items:center}
+.dn{position:relative;width:270px;height:270px;flex:none}.dn svg{width:100%;height:100%;display:block}.dn .ctr{position:absolute;top:58px;left:58px;width:154px;height:154px;border-radius:50%;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}.dn .ctr b{font-size:30px;font-weight:600;line-height:1.1}
 .dt{font-variant-numeric:tabular-nums}
-.dt th,.dt td{padding:11px 10px;text-align:right;vertical-align:top}
+.dt th,.dt td{padding:11px 8px;text-align:right;vertical-align:top}
+.dt th:not(:first-child),.dt td:not(:first-child){width:84px}
+.crt th:nth-child(1),.crt td:nth-child(1){width:130px}.crt th:nth-child(2),.crt td:nth-child(2){width:110px}.crt th:nth-child(n+4),.crt td:nth-child(n+4){width:92px}
 .dt th:first-child,.dt td:first-child{text-align:left}
 .dt th{white-space:nowrap;font-size:13px}
 .dt tbody tr:first-child td{border-top:0}
@@ -326,7 +329,7 @@ function sellerNote(r){
 function crBlock(r,kind){
  const isTx=kind==="tx";
  const title=isTx?"Contact Rate Poscompra":"Contact Rate Consultivo";
- const def=isTx?"Casos poscompra de compradores del período / órdenes pagadas del período (archivo 2). El numerador cuenta casos: los que tienen orden asociada más los inferidos por contenido. En vendedores se informa volumen, no tasa.":"Casos consultivos de compradores / usuarios únicos del período. En vendedores se informa volumen, no tasa. Los casos de órdenes expiradas no entran: tienen su propio módulo (7).";
+ const def=isTx?"Casos poscompra de compradores del período / órdenes pagadas del período (archivo 2). El numerador cuenta casos: los que tienen orden asociada más los inferidos por contenido. En vendedores se informa volumen, no tasa.":"Casos consultivos de compradores / usuarios únicos del período. En vendedores se informa volumen, no tasa..";
  const rows=["Compradores","Vendedores"].map(s=>{
   const c=r.cr[kind][s];
   const tot=isTx?c.cases:c.num;
@@ -336,7 +339,7 @@ function crBlock(r,kind){
  const segs=["Compradores","Vendedores"].filter(s=>(r.clusters[kind][s]||[]).reduce((x,c)=>x+c.n,0)>=3);
  const grp=(segs.length?segs:["Compradores"]).map(s=>S.mview==="tipo"?clusterGroupTipo(s,r.clusters[kind][s]||[],kind,s==="Compradores"?"B":"V"):clusterGroup(s,r.clusters[kind][s],s==="Compradores"?"var(--c-pri)":"var(--c-sec)",S.scope+"|"+kind+"|"+s,kind,s==="Compradores"?"B":"V")).join("");
  return `<div class="inner"><div><h3>${title}</h3><div class="small mute">${def}</div></div>
- <div class="scroll"><table style="min-width:660px"><thead><tr><th>Segmento</th><th>Contact Rate</th><th>Num. / Den.</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <div class="scroll"><table class="crt" style="min-width:560px"><thead><tr><th>Segmento</th><th>Contact Rate</th><th>Num. / Den.</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th></tr></thead><tbody>${rows}</tbody></table></div>
  <div class="small mute">Num. = casos del segmento; Den. = ${isTx?"órdenes pagadas del período":"usuarios únicos del período"}. Las columnas Consulta, Solicitud y Reclamo son el % de tipo de registro sobre esos casos (entre paréntesis, cantidad).</div>${isTx?"":sellerNote(r)}
  <div style="display:flex;flex-direction:column;gap:26px">${grp}</div></div>`;
 }
@@ -349,17 +352,17 @@ function s1(r){
   "Casos de vendedores sobre una orden. Se informa volumen, no tasa.",
   "Consultas sin compra asociada (cobertura, cuotas, cómo comprar). Tasa = casos / usuarios únicos del período.",
   "Prospectos y ex-vendedores de Hendyla (alta, migración) y operación del comercio. Se informa volumen, no tasa.",
-  "Casos de órdenes que expiraron sin pago (sección 7). Fuera del Contact Rate.",
+  "Casos de órdenes que expiraron sin pago. Fuera del Contact Rate y no se analizan.",
   "Spam, casos vacíos y clientes que abandonan: no se pueden atribuir a un comprador o vendedor. Fuera del Contact Rate."];
- const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span><div class="small mute" style="margin-left:20px;max-width:46ch;font-weight:400;line-height:1.35">${DESC[i]||""}</div></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
+ const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span><div class="small mute" style="margin-left:20px;font-weight:400;line-height:1.35">${DESC[i]||""}</div></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
  const sp=r.tx_split;
  const sin=r.sinid;
  return `<section class="card" style="gap:16px">${cardTitle("cr","2. Contact Rate y motivos de contacto")}
  <div class="note">Cada tipo de Contact Rate (poscompra y consultivo) se muestra separado por comprador y vendedor y, debajo, sus motivos de contacto. La cantidad de clusters surge de los datos. Cada verbatim va sin datos personales y con su tipo de registro y número de caso de Salesforce.</div>
  <div class="inner">
   <div class="donutrow">
-   <div style="position:relative;width:180px;height:180px;flex:none"><svg viewBox="0 0 180 180" width="180" height="180" role="img" aria-label="Distribución de casos por tipo de Contact Rate">${arcs}</svg>
-    <div style="position:absolute;top:34px;left:34px;width:112px;height:112px;border-radius:50%;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:22px;font-weight:600">${num(r.ctx.cases)}</div><div class="small mute">casos analizados</div></div></div>
+   <div class="dn"><svg viewBox="0 0 180 180" role="img" aria-label="Distribución de casos por tipo de Contact Rate">${arcs}</svg>
+    <div class="ctr"><b>${num(r.ctx.cases)}</b><div class="small mute">casos analizados</div></div></div>
    <div class="scroll"><table class="dt"><thead><tr><th>Tipo de contacto</th><th>Casos</th><th>% del total</th><th>Contact Rate</th></tr></thead><tbody>${leg}</tbody></table></div>
   </div>
   <div class="small mute">Transaccional = ${num(sp.orden)} casos con orden asociada + ${num(sp.inferido)} inferidos por contenido. Intención de compra = ${num(sp.intent)} casos de órdenes que expiraron sin pago; no entran en ninguna tasa.</div>
