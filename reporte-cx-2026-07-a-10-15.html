@@ -41,6 +41,14 @@ h1{margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.04;font-weight:800;le
 .bar.l{height:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 .mt{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+.chn{display:grid;grid-template-columns:96px 190px 230px minmax(0,1fr);gap:8px 22px;align-items:center}
+.chn.h{font-size:11px;font-weight:600;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:6px}
+.chn.r{padding:10px 0;border-bottom:1px solid var(--line)}.chn.r:last-of-type{border-bottom:0}
+.chn .cn{font-weight:600}.chn .cwb{height:10px;border-radius:5px;background:var(--track);overflow:hidden;margin-bottom:4px}.chn .cwb>div{height:100%;background:var(--c-grey)}
+.chn .cwt{font-size:12px}.chn .cmb{display:flex;height:14px;border-radius:5px;overflow:hidden;background:var(--track);margin-bottom:4px}
+.chn .ct{display:flex;flex-direction:column;gap:2px;font-size:12px}
+@media (max-width:900px){.chn.h{display:none}.chn{grid-template-columns:1fr 1fr}.chn .cn{grid-column:1/-1;font-size:15px}.chn .ct{grid-column:1/-1}}
+@media (max-width:520px){.chn{grid-template-columns:1fr}}
 .donutrow{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;align-items:center}
 .dn{position:relative;width:270px;height:270px;flex:none}.dn svg{width:100%;height:100%;display:block}.dn .ctr{position:absolute;top:58px;left:58px;width:154px;height:154px;border-radius:50%;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}.dn .ctr b{font-size:30px;font-weight:600;line-height:1.1}
 .dt{font-variant-numeric:tabular-nums}
@@ -382,12 +390,14 @@ function s2(r){
   const mot={};all.filter(x=>x.g!=="N").forEach(x=>{(mot[x.c]=mot[x.c]||[]).push(x)});
   const top=Object.entries(mot).sort((a,b)=>b[1].length-a[1].length).slice(0,3);
   const seg=(tp,col)=>`<div ${hv(c.name+" · "+tp,all.filter(x=>x.t===tp))} style="height:100%;width:${c.mix[tp]*100}%;background:${col}"></div>`;
-  return `<div style="display:flex;flex-direction:column;gap:5px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${pct(c.pct,0)} · ${num(c.n)} ${c.n===1?"caso":"casos"} · predomina ${c.top.toLowerCase()}</span></div>
- <div style="display:flex;width:${(c.pct/mx*100).toFixed(1)}%;min-width:8px;height:14px;border-radius:5px;overflow:hidden;background:var(--track)">${seg("Consulta","var(--c-pri)")}${seg("Solicitud","var(--c-sec2)")}${seg("Reclamo","var(--c-alert)")}</div>
- <div class="small mute">Consulta ${pct(c.mix.Consulta,0)} · Solicitud ${pct(c.mix.Solicitud,0)} · Reclamo ${pct(c.mix.Reclamo,0)}</div>
- ${top.length?`<div class="small" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="mute">Top motivos:</span>${top.map(([n,a])=>`<span class="chip">${esc(n)} · ${num(a.length)} (${pct(a.length/c.n,0)})</span>`).join("")}</div>`:""}</div>`}).join("");
+  return `<div class="chn r">
+ <div class="cn">${esc(c.name)}</div>
+ <div class="cw"><div class="cwb"><div ${hv(c.name,all)} style="width:${(c.pct/mx*100).toFixed(1)}%;min-width:4px"></div></div><div class="cwt"><b>${pct(c.pct,0)}</b> · ${num(c.n)} ${c.n===1?"caso":"casos"}</div></div>
+ <div class="cm"><div class="cmb">${seg("Consulta","var(--c-pri)")}${seg("Solicitud","var(--c-sec2)")}${seg("Reclamo","var(--c-alert)")}</div><div class="small mute">Consulta ${pct(c.mix.Consulta,0)} · Solicitud ${pct(c.mix.Solicitud,0)} · Reclamo ${pct(c.mix.Reclamo,0)}</div></div>
+ <div class="ct">${top.length?top.map(([n,a],i)=>`<div class="small"><span class="mute">${i+1}.</span> ${esc(n)} <b>${num(a.length)}</b> <span class="mute">(${pct(a.length/c.n,0)})</span></div>`).join(""):'<span class="small mute">Sin motivos identificados</span>'}</div></div>`}).join("");
  return `<section class="card">${cardTitle("can","3. Canales de contacto")}
- <div class="note">% de casos por canal, aperturado por tipo de registro. El largo de la barra es el peso del canal y debajo van sus tres motivos de contacto principales (% sobre los casos del canal; no incluyen spam, casos vacíos ni abandonos). Incluye todos los casos analizados.</div>
+ <div class="note">Cada fila es un canal: su peso en el total de casos, la mezcla de tipos de registro (la barra completa es el 100% del canal) y sus tres motivos principales (% sobre los casos del canal; no incluyen spam, casos vacíos ni abandonos). Incluye todos los casos analizados.</div>
+ <div class="chn h"><div>Canal</div><div>Peso en el total</div><div>Tipo de registro</div><div>Top 3 motivos (casos y % del canal)</div></div>
  ${rows}
  <div class="legend"><span><span class="dot" style="background:var(--c-pri);width:10px;height:10px;margin-right:6px"></span>Consulta</span><span><span class="dot" style="background:var(--c-sec2);width:10px;height:10px;margin-right:6px"></span>Solicitud</span><span><span class="dot" style="background:var(--c-alert);width:10px;height:10px;margin-right:6px"></span>Reclamo</span></div></section>`;
 }
