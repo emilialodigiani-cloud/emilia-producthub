@@ -311,7 +311,7 @@ function quotesBlock(quotes,key){
 function clusterGroup(title,items,color,kp,kind,sc){
  if(!items||!items.length)return `<div><h4>Motivos · ${title}</h4><div class="note">Sin casos en este período.</div></div>`;
  const idsF=(name,tp)=>CASES.filter(c=>inS(c)&&c.g===sc&&(kind==="tx"?isTx(c):c.k==="C")&&c.c===name&&(!tp||c.t===tp));
- return `<div style="display:flex;flex-direction:column;gap:14px"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 18px"><h4>Motivos · ${title}</h4><div class="legend">${TIPOS.map(tp=>`<span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:6px"></span>${tp}</span>`).join("")}</div></div><div class="cl2">${items.map(it=>`<div style="display:flex;flex-direction:column;gap:4px" ${hv(it.name,idsF(it.name))}>
+ return `<div style="display:flex;flex-direction:column;gap:14px"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 18px"><h4>Motivos · ${title}</h4><div class="legend">${TIPOS.map(tp=>`<span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:6px"></span>${tp}</span>`).join("")}</div></div><div class="cl2">${items.map(it=>`<div style="display:flex;flex-direction:column;gap:4px">
   <div class="row"><span style="font-weight:600">${esc(it.name)}</span><span>${num(it.n)} · ${pct(it.pct,0)}</span></div>
   <div class="bar st">${TIPOS.map(tp=>it.mix[tp]?`<i ${hv(it.name+" · "+tp,idsF(it.name,tp))} style="width:${(it.pct*100*it.mix[tp]/it.n).toFixed(2)}%;background:${TCOL[tp]}"></i>`:"").join("")}</div>
   <div class="small mute" style="font-size:11px">${TIPOS.filter(tp=>it.mix[tp]).map(tp=>`${tp} ${it.mix[tp]}`).join(" · ")}</div>
@@ -322,7 +322,7 @@ function clusterGroupTipo(title,items,kind,sc){
  const cols=TIPOS.map(tp=>{
   const arr=items.filter(i=>i.mix[tp]>0).sort((a,b)=>b.mix[tp]-a.mix[tp]);
   const tot=arr.reduce((s,i)=>s+i.mix[tp],0);
-  return `<div class="tcol"><div class="row" style="font-weight:600"><span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:8px"></span>${tp}</span><span>${num(tot)} ${tot===1?"caso":"casos"}</span></div>${tot?arr.map(i=>`<div style="display:flex;flex-direction:column;gap:4px" ${hv(i.name+" · "+tp,idsF(i.name,tp))}><div class="row" style="font-size:13px;flex-wrap:nowrap;align-items:flex-start"><span style="min-width:0">${esc(i.name)}</span><span style="white-space:nowrap">${num(i.mix[tp])} · ${pct(i.mix[tp]/tot,0)}</span></div><div class="bar"><i style="width:${(i.mix[tp]/tot*100).toFixed(1)}%;min-width:3px;background:${TCOL[tp]}"></i></div></div>`).join(""):'<div class="small mute">Sin casos</div>'}</div>`}).join("");
+  return `<div class="tcol"><div class="row" style="font-weight:600"><span><span class="dot" style="background:${TCOL[tp]};width:10px;height:10px;margin-right:8px"></span>${tp}</span><span>${num(tot)} ${tot===1?"caso":"casos"}</span></div>${tot?arr.map(i=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row" style="font-size:13px;flex-wrap:nowrap;align-items:flex-start"><span style="min-width:0">${esc(i.name)}</span><span style="white-space:nowrap">${num(i.mix[tp])} · ${pct(i.mix[tp]/tot,0)}</span></div><div class="bar"><i style="width:${(i.mix[tp]/tot*100).toFixed(1)}%;min-width:3px;background:${TCOL[tp]}"></i></div></div>`).join(""):'<div class="small mute">Sin casos</div>'}</div>`}).join("");
  return `<div style="display:flex;flex-direction:column;gap:14px"><h4>Motivos · ${title} · por tipo de registro</h4><div class="small mute">Cada columna reparte los casos de ese tipo entre los motivos (el 100% de la barra son todos los casos del tipo).</div><div class="cl3">${cols}</div></div>`;
 }
 function mixCell(m,tot){return TIPOS.map(t=>`<td>${tot?pct(m[t]/tot,0):"—"} <span class="small mute">(${m[t]})</span></td>`).join("")}
@@ -360,7 +360,7 @@ function s1(r){
   "Prospectos y ex-vendedores de Hendyla (alta, migración) y operación del comercio. Se informa volumen, no tasa.",
   "Casos de órdenes que expiraron sin pago (sección 7). Fuera del Contact Rate.",
   "Spam, casos vacíos y clientes que abandonan: no se pueden atribuir a un comprador o vendedor. Fuera del Contact Rate."];
- const leg=r.donut.map((d,i)=>`<tr ${hv(d.name,sliceIds[i])}><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span><div class="small mute" style="margin-left:20px;max-width:46ch;font-weight:400;line-height:1.35">${DESC[i]||""}</div></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
+ const leg=r.donut.map((d,i)=>`<tr><td><span class="dot" style="background:${DCOL[i]};margin-right:8px;vertical-align:-1px"></span><span style="font-weight:600">${d.name}</span><div class="small mute" style="margin-left:20px;max-width:46ch;font-weight:400;line-height:1.35">${DESC[i]||""}</div></td><td>${num(d.cases)}</td><td>${pct(d.share,0)}</td><td style="font-weight:600">${d.rate==null?(d.basis==="volumen"?"volumen":"—"):pct(d.rate)}</td></tr>`).join("");
  const sp=r.tx_split;
  const sin=r.sinid;
  return `<section class="card" style="gap:16px">${cardTitle("cr","2. Contact Rate y motivos de contacto")}
@@ -386,10 +386,10 @@ function s2(r){
   const mot={};all.filter(x=>x.g!=="N").forEach(x=>{(mot[x.c]=mot[x.c]||[]).push(x)});
   const top=Object.entries(mot).sort((a,b)=>b[1].length-a[1].length).slice(0,3);
   const seg=(tp,col)=>`<div ${hv(c.name+" · "+tp,all.filter(x=>x.t===tp))} style="height:100%;width:${c.mix[tp]*100}%;background:${col}"></div>`;
-  return `<div style="display:flex;flex-direction:column;gap:5px" ${hv(c.name,all)}><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${pct(c.pct,0)} · ${num(c.n)} ${c.n===1?"caso":"casos"} · predomina ${c.top.toLowerCase()}</span></div>
+  return `<div style="display:flex;flex-direction:column;gap:5px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${pct(c.pct,0)} · ${num(c.n)} ${c.n===1?"caso":"casos"} · predomina ${c.top.toLowerCase()}</span></div>
  <div style="display:flex;width:${(c.pct/mx*100).toFixed(1)}%;min-width:8px;height:14px;border-radius:5px;overflow:hidden;background:var(--track)">${seg("Consulta","var(--c-pri)")}${seg("Solicitud","var(--c-sec2)")}${seg("Reclamo","var(--c-alert)")}</div>
  <div class="small mute">Consulta ${pct(c.mix.Consulta,0)} · Solicitud ${pct(c.mix.Solicitud,0)} · Reclamo ${pct(c.mix.Reclamo,0)}</div>
- ${top.length?`<div class="small" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="mute">Top motivos:</span>${top.map(([n,a])=>`<span class="chip" ${hv(c.name+" · "+n,a)}>${esc(n)} · ${num(a.length)} (${pct(a.length/c.n,0)})</span>`).join("")}</div>`:""}</div>`}).join("");
+ ${top.length?`<div class="small" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="mute">Top motivos:</span>${top.map(([n,a])=>`<span class="chip">${esc(n)} · ${num(a.length)} (${pct(a.length/c.n,0)})</span>`).join("")}</div>`:""}</div>`}).join("");
  return `<section class="card">${cardTitle("can","3. Canales de contacto")}
  <div class="note">% de casos por canal, aperturado por tipo de registro. El largo de la barra es el peso del canal y debajo van sus tres motivos de contacto principales (% sobre los casos del canal; no incluyen spam, casos vacíos ni abandonos). Incluye todos los casos analizados.</div>
  ${rows}
@@ -401,17 +401,17 @@ function s3(r){
  const bit=RBIT[S.win];
  const recIds=(n,tp)=>CASES.filter(c=>inS(c)&&c.c===n&&(!tp||c.t===tp)&&(c.r&bit));
  const cell=(c,n,tp)=>{ if(!c.n)return `<td style="padding:8px 6px;border-radius:6px" class="mute">—</td>`; const rt=c.rec/c.n; const al=Math.min(.55,rt*2.2);
-   return `<td ${hv("Recontactados · "+n+" · "+tp,recIds(n,tp))} style="padding:8px 6px;border-radius:6px;background:rgba(255,102,0,${al.toFixed(2)})">${c.rec} · ${pct(rt,0)}<div class="small mute">de ${c.n}</div></td>`};
+   return `<td style="padding:8px 6px;border-radius:6px;background:rgba(255,102,0,${al.toFixed(2)})">${c.rec} · ${pct(rt,0)}<div class="small mute">de ${c.n}</div></td>`};
  let ex=null;names.forEach(n=>TIPOS.forEach(tp=>{const c=mat[n][tp];if(c.n>=10&&(!ex||c.rec/c.n>ex.rt))ex={n,tp,rec:c.rec,nn:c.n,rt:c.rec/c.n}}));
  return `<section class="card">${cardTitle("rec","4. Recontacto")}
  <div class="note">Mismo contacto y mismo motivo dentro de la ventana (misma orden si la hay); incluye reaperturas y casos hijos. Solo ${pct(X.qual.contact_id_cov,0)} de los casos trae algún dato para reconocer al contacto, así que la tasa es un piso.</div>
- <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" ${hv(l+" (casos recontactados)",CASES.filter(c=>inS(c)&&(c.r&RBIT[k])))} style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
+ <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
  <div class="howto"><b>Cómo leer esta tabla.</b> Cada fila es un motivo de contacto y cada columna un tipo de registro. En cada celda, el primer número son los casos que volvieron a contactar por lo mismo dentro de ${S.win} días; el porcentaje es esa cantidad sobre todos los casos de ese motivo y tipo (el «de N» de abajo).${ex?` Ejemplo: en «${esc(ex.n)}» · ${ex.tp}, ${ex.rec} de ${ex.nn} casos (${pct(ex.rt,0)}) tuvieron un recontacto.`:""} Cuanto más oscura la celda, mayor la tasa; una tasa alta sobre pocos casos pesa menos que una baja sobre muchos. Pasá el mouse sobre una celda para ver los números de caso.</div>
  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><h3 style="font-size:15px">Motivo x tipo de registro: casos recontactados y tasa de recontacto</h3>
  <div class="seg">${["3","7","14"].map(w=>`<button data-act="win" data-v="${w}" class="${S.win===w?"on":""}">${w} días</button>`).join("")}</div></div>
  <div class="small mute">Ventana: ${S.win} días. Cada celda: casos recontactados · tasa = recontactados / casos de ese motivo y tipo. Más oscuro = tasa más alta. Solo se muestran los motivos con al menos un recontacto${hid?` (${hid} motivos sin recontacto no se listan)`:""}.</div>
  <div class="scroll"><table style="border-collapse:separate;border-spacing:4px;min-width:640px"><thead><tr><th>Motivo</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th><th>Total motivo</th></tr></thead><tbody>
- ${names.map(n=>{const m=mat[n];return `<tr><td style="font-weight:600;padding:8px 6px">${esc(n)}</td>${cell(m.Consulta,n,"Consulta")}${cell(m.Solicitud,n,"Solicitud")}${cell(m.Reclamo,n,"Reclamo")}<td ${hv("Recontactados · "+n,recIds(n))} style="font-weight:600;padding:8px 6px">${m.total.rec} · ${pct(m.total.n?m.total.rec/m.total.n:null,0)}<div class="small mute" style="font-weight:400">de ${m.total.n}</div></td></tr>`}).join("")}
+ ${names.map(n=>{const m=mat[n];return `<tr><td style="font-weight:600;padding:8px 6px">${esc(n)}</td>${cell(m.Consulta,n,"Consulta")}${cell(m.Solicitud,n,"Solicitud")}${cell(m.Reclamo,n,"Reclamo")}<td style="font-weight:600;padding:8px 6px">${m.total.rec} · ${pct(m.total.n?m.total.rec/m.total.n:null,0)}<div class="small mute" style="font-weight:400">de ${m.total.n}</div></td></tr>`}).join("")}
  </tbody></table></div></section>`;
 }
 function s4(r){
@@ -438,10 +438,10 @@ function stageRow(s,color){
  const ms=Object.entries(mot).sort((a,b)=>b[1].length-a[1].length);
  const tp=x=>TIPOS.map(tt=>[tt,x.filter(c=>c.t===tt)]).filter(a=>a[1].length);
  const key=S.scope+"|etapa|"+s.name;
- return `<div style="display:flex;flex-direction:column;gap:4px" ${hv(s.name,cs)}><div class="row"><span style="font-weight:600">${s.name}</span><span>${num(s.n)} · ${pct(s.pct,0)} · ${s.per100==null?"n/d":dec(s.per100)} c/100 órd.</span></div>
+ return `<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${s.name}</span><span>${num(s.n)} · ${pct(s.pct,0)} · ${s.per100==null?"n/d":dec(s.per100)} c/100 órd.</span></div>
  <div class="bar l st">${tp(cs).map(([tt,a])=>`<i ${hv(s.name+" · "+tt,a)} style="width:${(s.pct*100*a.length/(cs.length||1)).toFixed(2)}%;background:${TCOL[tt]}"></i>`).join("")}</div>
  <div class="small mute">${s.n?tp(cs).map(([tt,a])=>`${tt} ${a.length}`).join(" · ")+` · compradores ${s.buyers}, vendedores ${s.sellers}${s.other?", sin segmento "+s.other:""}`:"Sin contactos"}${s.orders_pass==null?"":` · ${num(s.orders_pass)} órdenes pasaron por la etapa`}</div>
- ${ms.length?`<details class="vb" data-k="${esc(key)}"${S.vb[key]?" open":""}><summary>Ver motivos (${ms.length})</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${ms.map(([n,a])=>`<div ${hv(s.name+" · "+n,a)}><div class="row" style="font-size:13px;flex-wrap:nowrap"><span style="min-width:0">${esc(n)}</span><span style="white-space:nowrap"><b>${num(a.length)}</b> · ${pct(a.length/cs.length,0)}</span></div><div class="small mute" style="font-size:11px;display:flex;gap:10px;flex-wrap:wrap">${tp(a).map(([tt,b])=>`<span><i class="dot" style="background:${TCOL[tt]};width:8px;height:8px;margin-right:4px"></i>${tt} ${b.length}</span>`).join("")}</div></div>`).join("")}</div></details>`:""}</div>`;
+ ${ms.length?`<details class="vb" data-k="${esc(key)}"${S.vb[key]?" open":""}><summary>Ver motivos (${ms.length})</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">${ms.map(([n,a])=>`<div><div class="row" style="font-size:13px;flex-wrap:nowrap"><span style="min-width:0">${esc(n)}</span><span style="white-space:nowrap"><b>${num(a.length)}</b> · ${pct(a.length/cs.length,0)}</span></div><div class="small mute" style="font-size:11px;display:flex;gap:10px;flex-wrap:wrap">${tp(a).map(([tt,b])=>`<span><i class="dot" style="background:${TCOL[tt]};width:8px;height:8px;margin-right:4px"></i>${tt} ${b.length}</span>`).join("")}</div></div>`).join("")}</div></details>`:""}</div>`;
 }
 function s5(r){
  const hp=["Pagada","Preparando","Lista para retirar","En tránsito","Entregada"];
@@ -463,7 +463,7 @@ function s6(r){
   <div class="kpi"><div class="note">Órdenes expiradas con contacto</div><div class="v">${num(i.orders_contact)}</div><div class="small mute">de ${num(i.expiradas)} expiradas · ${pct(i.rate_contact,2)}</div></div>
  </div>
  <div class="small mute">Es una cota baja: la mayoría de las intenciones que no se concretan no genera contacto.</div>
- ${i.clusters.length?`<div style="display:flex;flex-direction:column;gap:12px">${i.clusters.map(c=>`<div style="display:flex;flex-direction:column;gap:4px" ${hv(c.name,CASES.filter(x=>inS(x)&&x.k==="X"&&x.c===c.name))}><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>${quotesBlock(c.quotes,S.scope+"|int|"+c.name)}</div>`).join("")}</div>`:'<div class="small mute">Sin casos en este período.</div>'}
+ ${i.clusters.length?`<div style="display:flex;flex-direction:column;gap:12px">${i.clusters.map(c=>`<div style="display:flex;flex-direction:column;gap:4px"><div class="row"><span style="font-weight:600">${esc(c.name)}</span><span>${num(c.n)} · ${pct(c.pct,0)}</span></div>${quotesBlock(c.quotes,S.scope+"|int|"+c.name)}</div>`).join("")}</div>`:'<div class="small mute">Sin casos en este período.</div>'}
  <details><summary class="small" style="cursor:pointer">Números de caso (${num(i.cases.length)})</summary><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${i.cases.map(c=>`<span class="chip">${c}</span>`).join("")}</div></details></section>`;
 }
 function reading(){
