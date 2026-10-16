@@ -392,11 +392,11 @@ function s2(r){
   const seg=(tp,col)=>`<div ${hv(c.name+" · "+tp,all.filter(x=>x.t===tp))} style="height:100%;width:${c.mix[tp]*100}%;background:${col}"></div>`;
   return `<div class="chn r">
  <div class="cn">${esc(c.name)}</div>
- <div class="cw"><div class="cwb"><div ${hv(c.name,all)} style="width:${(c.pct/mx*100).toFixed(1)}%;min-width:4px"></div></div><div class="cwt"><b>${pct(c.pct,0)}</b> · ${num(c.n)} ${c.n===1?"caso":"casos"}</div></div>
+ <div class="cw"><div class="cwb"><div ${hv(c.name,all)} style="width:${(c.pct*100).toFixed(1)}%;min-width:3px"></div></div><div class="cwt"><b>${pct(c.pct,0)}</b> · ${num(c.n)} ${c.n===1?"caso":"casos"}</div></div>
  <div class="cm"><div class="cmb">${seg("Consulta","var(--c-pri)")}${seg("Solicitud","var(--c-sec2)")}${seg("Reclamo","var(--c-alert)")}</div><div class="small mute">Consulta ${pct(c.mix.Consulta,0)} · Solicitud ${pct(c.mix.Solicitud,0)} · Reclamo ${pct(c.mix.Reclamo,0)}</div></div>
  <div class="ct">${top.length?top.map(([n,a],i)=>`<div class="small"><span class="mute">${i+1}.</span> ${esc(n)} <b>${num(a.length)}</b> <span class="mute">(${pct(a.length/c.n,0)})</span></div>`).join(""):'<span class="small mute">Sin motivos identificados</span>'}</div></div>`}).join("");
  return `<section class="card">${cardTitle("can","3. Canales de contacto")}
- <div class="note">Cada fila es un canal: su peso en el total de casos, la mezcla de tipos de registro (la barra completa es el 100% del canal) y sus tres motivos principales (% sobre los casos del canal; no incluyen spam, casos vacíos ni abandonos). Incluye todos los casos analizados.</div>
+ <div class="note">Cada fila es un canal: su peso en el total de casos (la barra completa es el 100% de los contactos), la mezcla de tipos de registro (la barra completa es el 100% del canal) y sus tres motivos principales (% sobre los casos del canal; no incluyen spam, casos vacíos ni abandonos). Incluye todos los casos analizados.</div>
  <div class="chn h"><div>Canal</div><div>Peso en el total</div><div>Tipo de registro</div><div>Top 3 motivos (casos y % del canal)</div></div>
  ${rows}
  <div class="legend"><span><span class="dot" style="background:var(--c-pri);width:10px;height:10px;margin-right:6px"></span>Consulta</span><span><span class="dot" style="background:var(--c-sec2);width:10px;height:10px;margin-right:6px"></span>Solicitud</span><span><span class="dot" style="background:var(--c-alert);width:10px;height:10px;margin-right:6px"></span>Reclamo</span></div></section>`;
