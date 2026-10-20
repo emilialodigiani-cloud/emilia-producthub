@@ -524,8 +524,8 @@ function glosario(){
  const a=R.all, tx=a.cr.tx.Compradores, cn=a.cr.cons.Compradores, p=a.pdt, rc=a.recontact["7"], ctx=a.ctx;
  const G=[
  ["Universo y bases",[
-  ["Órdenes pagadas","Órdenes con pago confirmado creadas en el período. Salen del archivo 2 (backoffice puente) desde el 01/07, sin las expiradas, más las del archivo 3 que todavía no están en el puente. Cada mes se cuenta por fecha de creación de la orden.",`En el período: ${num(ctx.orders)}`],
-  ["Órdenes con historial","Subconjunto de las órdenes pagadas que tiene fechas de cada estado (archivo 3, desde el 17/07). Es la base de la promesa de entrega y de las etapas.",`En el período: ${num(ctx.orders_hist)}`],
+  ["Órdenes pagadas","Órdenes con pago confirmado creadas en el período, sin las expiradas (nunca pagadas). Cada mes se cuenta por fecha de creación de la orden.",`En el período: ${num(ctx.orders)}`],
+  ["Órdenes con historial","Subconjunto de las órdenes pagadas que tiene fechas de cada estado (disponible desde el 17/07). Es la base de la promesa de entrega y de las etapas.",`En el período: ${num(ctx.orders_hist)}`],
   ["Casos analizados","Casos de Salesforce del período una vez hechas las limpiezas: se descartan pruebas, casos de Ubox, casos de la campaña de camisetas de la selección y casos del bot ingresados vacíos por un bug. Cada caso se cuenta en su mes de apertura.",`En el período: ${num(ctx.cases)}`],
   ["Usuarios registrados","Usuarios compradores registrados en la plataforma, con los activos debajo. Dato informado en el formulario de entrada; se muestra como contexto y no entra en ninguna tasa.",`En el período: ${num(ctx.buyers_reg)} registrados, ${num(ctx.buyers_act)} activos`],
   ["Usuarios únicos","Usuarios únicos del período informados en el formulario. Son el denominador del Contact Rate Consultivo.",`En el período: ${num(ctx.buyers)}`],
@@ -554,7 +554,7 @@ function glosario(){
   ["Peso del canal","Casos del canal sobre el total de casos analizados. La barra completa es el 100% de los contactos.",""],
   ["Mezcla por tipo de registro","Reparto de Consulta, Solicitud y Reclamo dentro de cada canal. La barra completa es el 100% de ese canal.",""]]],
  ["Promesa de entrega (PDT)",[
-  ["PDT","Promise delivery time: 72 horas = 3 días hábiles desde la creación de la orden, sin sábados, domingos ni feriados (15/08 y 29/09). Se mide solo con el archivo 3.",""],
+  ["PDT","Promise delivery time: 72 horas = 3 días hábiles desde la creación de la orden, sin sábados, domingos ni feriados (15/08 y 29/09). Se mide solo con las órdenes con historial.",""],
   ["Órdenes dentro de PDT","Órdenes entregadas antes de que venza la promesa, o que todavía no llegaron a su vencimiento.",`En el período: ${num(p.dentro.orders)} órdenes`],
   ["Órdenes fuera de PDT","Órdenes entregadas después de vencida la promesa, o vencidas sin entregar (incluye devueltas y entrega fallida). Las canceladas antes del vencimiento quedan fuera de ambos grupos.",`En el período: ${num(p.fuera.orders)} órdenes`],
   ["Reclamo de envío","Caso poscompra del motivo Seguimiento de pedido / envío, asociado a una orden, de cualquier tipo de registro.",""],
@@ -562,7 +562,7 @@ function glosario(){
   ["Contact Rate fuera de PDT","Órdenes con un reclamo de envío después de vencida la promesa sobre las órdenes fuera de PDT.",`${num(p.fuera.contact_orders)} / ${num(p.fuera.orders)} = ${pct(p.fuera.rate,1)}`],
   ["Razón fuera / dentro","Contact Rate fuera de PDT dividido por el de dentro. 1x: reclaman igual. Más de 1x: reclaman más las órdenes tardías, señal de problema logístico. Menos de 1x: no reclaman más.",p.ratio==null?"":`${dec(p.ratio,2)}x`]]],
  ["Etapas de la orden",[
-  ["Etapa al momento del contacto","Estado vigente de la orden al mediodía de la fecha del caso, según el historial de estados del archivo 3. Solo los casos poscompra con orden e historial tienen etapa.",""],
+  ["Etapa al momento del contacto","Estado vigente de la orden al mediodía de la fecha del caso, según el historial de estados de la orden. Solo los casos poscompra con orden e historial tienen etapa.",""],
   ["% de contactos por etapa","Casos de la etapa sobre los casos con etapa identificada.",""],
   ["Órdenes que pasaron por la etapa","Órdenes que llegaron a esa etapa o a una posterior en el recorrido.",""],
   ["c/100 órd. (intensidad)","Casos de la etapa cada 100 órdenes que pasaron por ella. Permite comparar etapas con distinto volumen de órdenes.",""]]],
