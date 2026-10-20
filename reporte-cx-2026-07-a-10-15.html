@@ -49,6 +49,8 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 .chn .ct{display:flex;flex-direction:column;gap:2px;font-size:12px}
 @media (max-width:900px){.chn.h{display:none}.chn{grid-template-columns:1fr 1fr}.chn .cn{grid-column:1/-1;font-size:15px}.chn .ct{grid-column:1/-1}}
 @media (max-width:520px){.chn{grid-template-columns:1fr}}
+.gl{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:0 22px}.gl .gt,.gl .gd{padding:11px 0;border-top:1px solid var(--line)}.gl .gt:first-child,.gl .gd:first-of-type{border-top:0}.gl .gt{font-weight:600}.gl .gd{font-size:13px;line-height:1.55}.gl .ge{margin-top:4px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+@media (max-width:640px){.gl{grid-template-columns:1fr}.gl .gt{border-top:1px solid var(--line);padding-bottom:0}.gl .gd{border-top:0;padding-top:2px}}
 .donutrow{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;align-items:center}
 .dn{position:relative;width:270px;height:270px;flex:none}.dn svg{width:100%;height:100%;display:block}.dn .ctr{position:absolute;top:58px;left:58px;width:154px;height:154px;border-radius:50%;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}.dn .ctr b{font-size:30px;font-weight:600;line-height:1.1}
 .dt{font-variant-numeric:tabular-nums}
@@ -246,6 +248,7 @@ function header(){
  <div class="seg" role="tablist">
   <button role="tab" aria-selected="${S.tab==="kpi"}" data-act="tab" data-v="kpi" class="${S.tab==="kpi"?"on":""}">KPIs</button>
   <button role="tab" aria-selected="${S.tab==="base"}" data-act="tab" data-v="base" class="${S.tab==="base"?"on":""}">Transparencia de la base</button>
+  <button role="tab" aria-selected="${S.tab==="glos"}" data-act="tab" data-v="glos" class="${S.tab==="glos"?"on":""}">Glosario</button>
  </div></div></header>`;
 }
 function ctxCards(r){
@@ -516,9 +519,63 @@ function base(){
  <div class="maxh"><table><thead><tr><th>Caso</th><th>Fecha</th><th>Motivo de descarte</th><th>Palabra clave</th></tr></thead><tbody>${X.discarded.map(d=>`<tr><td style="font-weight:600">${d[0]}</td><td>${d[1]}</td><td>${esc(d[2])}</td><td class="mute">${esc(d[3])}</td></tr>`).join("")}</tbody></table></div>
  <div class="small mute">Sin nombres, cédulas, emails ni teléfonos. ${num(X.discarded.length)} casos.</div></section></div>`;
 }
+function glosario(){
+ const a=R.all, tx=a.cr.tx.Compradores, cn=a.cr.cons.Compradores, p=a.pdt, rc=a.recontact["7"], ctx=a.ctx;
+ const G=[
+ ["Universo y bases",[
+  ["Órdenes pagadas","Órdenes con pago confirmado creadas en el período. Salen del archivo 2 (backoffice puente) desde el 01/07, sin las expiradas, más las del archivo 3 que todavía no están en el puente. Cada mes se cuenta por fecha de creación de la orden.",`En el período: ${num(ctx.orders)}`],
+  ["Órdenes con historial","Subconjunto de las órdenes pagadas que tiene fechas de cada estado (archivo 3, desde el 17/07). Es la base de la promesa de entrega y de las etapas.",`En el período: ${num(ctx.orders_hist)}`],
+  ["Casos analizados","Casos de Salesforce del período una vez hechas las limpiezas: se descartan pruebas, casos de Ubox, casos de la campaña de camisetas de la selección y casos del bot ingresados vacíos por un bug. Cada caso se cuenta en su mes de apertura.",`En el período: ${num(ctx.cases)}`],
+  ["Usuarios registrados","Usuarios compradores registrados en la plataforma, con los activos debajo. Dato informado en el formulario de entrada; se muestra como contexto y no entra en ninguna tasa.",`En el período: ${num(ctx.buyers_reg)} registrados, ${num(ctx.buyers_act)} activos`],
+  ["Usuarios únicos","Usuarios únicos del período informados en el formulario. Son el denominador del Contact Rate Consultivo.",`En el período: ${num(ctx.buyers)}`],
+  ["Vendedores registrados","Vendedores registrados en la plataforma. Sus casos se informan como volumen, no como tasa.",`En el período: ${num(ctx.sellers)}`]]],
+ ["Clasificación de los casos",[
+  ["Caso poscompra (transaccional)","Caso de un comprador sobre una compra ya realizada. Tiene una orden asociada (por order ID, cédula, email o nombre, en ese orden de prioridad) o se infiere por el contenido del texto (seguimiento, cancelación, reembolso, etc.).",""],
+  ["Caso inferido por contenido","Caso poscompra sin orden asociable. Se lo considera poscompra porque el texto habla de un pedido ya hecho. El listado está en Transparencia de la base.",""],
+  ["Caso consultivo","Consulta de un comprador sin compra asociada: cobertura, cuotas, cómo comprar, información de producto.",""],
+  ["Intención de compra","Caso asociado a una orden expirada (nunca pagada). Queda fuera de todas las tasas y no se analiza.",""],
+  ["Sin identificar / sin segmento","Spam, casos vacíos y clientes que abandonan: no se pueden atribuir a un comprador ni a un vendedor. Quedan fuera de las tasas.",""],
+  ["Segmento (comprador / vendedor)","A quién pertenece el caso. Compradores tienen tasa; vendedores se informan por volumen.",""],
+  ["Tipo de registro","Campo de Salesforce que clasifica el caso en Consulta, Solicitud o Reclamo. Los porcentajes por tipo son sobre los casos del grupo que se está mirando.",""],
+  ["Motivo de contacto","Categoría asignada por reglas sobre la descripción del caso (por ejemplo, seguimiento de pedido o reembolso). La cantidad de motivos surge de los datos. «Top motivos» son los de más casos.",""]]],
+ ["Contact Rate",[
+  ["Contact Rate Poscompra","Casos poscompra de compradores sobre las órdenes pagadas del mismo período. No es el % de órdenes que contactaron: una orden puede generar más de un caso. Los casos se cuentan por mes de apertura y las órdenes por mes de creación, así que julio incluye casos sobre órdenes de junio y sale más alto.",`Período completo: ${num(tx.num)} casos / ${num(tx.den)} órdenes = ${pct(tx.rate,1)}`],
+  ["Contact Rate Consultivo","Casos consultivos de compradores sobre los usuarios únicos del mismo período.",`Período completo: ${num(cn.num)} casos / ${num(cn.den)} usuarios únicos = ${pct(cn.rate,2)}`],
+  ["Volumen (vendedores)","Cantidad de casos de vendedores. No se calcula tasa porque la mayoría de los casos consultivos de vendedores son prospectos y ex-vendedores de Hendyla, no vendedores registrados.",""],
+  ["% del total","Casos de cada tipo de contacto sobre el total de casos analizados (dona del módulo 2).",""],
+  ["% por motivo","Casos del motivo sobre los casos del bloque (compradores poscompra o compradores consultivos).",""]]],
+ ["Recontacto",[
+  ["Recontacto a N días","Porcentaje de casos que tuvieron un caso posterior del mismo contacto y el mismo motivo dentro de N días (misma orden cuando ambos tienen orden), o un caso hijo (reapertura). Base: todos los casos analizados. 7 días es la ventana principal; 3 y 14 son sensibilidad.",`A 7 días: ${num(rc.num)} / ${num(rc.den)} = ${pct(rc.rate,1)}`],
+  ["Tasa de recontacto por motivo y tipo","Casos recontactados de un motivo y tipo de registro sobre todos los casos de ese motivo y tipo. Cuanto más oscura la celda, mayor la tasa.",""],
+  ["Cobertura de identificación","Porcentaje de casos que trae algún dato para reconocer al contacto. Si es bajo, el recontacto real es mayor al medido: la tasa es un piso.",`${pct(X.qual.contact_id_cov,0)} de los casos`]]],
+ ["Canales",[
+  ["Canal de contacto","Origen del caso en Salesforce: WhatsApp, Teléfono, Email, Turnero o Redes.",""],
+  ["Peso del canal","Casos del canal sobre el total de casos analizados. La barra completa es el 100% de los contactos.",""],
+  ["Mezcla por tipo de registro","Reparto de Consulta, Solicitud y Reclamo dentro de cada canal. La barra completa es el 100% de ese canal.",""]]],
+ ["Promesa de entrega (PDT)",[
+  ["PDT","Promise delivery time: 72 horas = 3 días hábiles desde la creación de la orden, sin sábados, domingos ni feriados (15/08 y 29/09). Se mide solo con el archivo 3.",""],
+  ["Órdenes dentro de PDT","Órdenes entregadas antes de que venza la promesa, o que todavía no llegaron a su vencimiento.",`En el período: ${num(p.dentro.orders)} órdenes`],
+  ["Órdenes fuera de PDT","Órdenes entregadas después de vencida la promesa, o vencidas sin entregar (incluye devueltas y entrega fallida). Las canceladas antes del vencimiento quedan fuera de ambos grupos.",`En el período: ${num(p.fuera.orders)} órdenes`],
+  ["Reclamo de envío","Caso poscompra del motivo Seguimiento de pedido / envío, asociado a una orden, de cualquier tipo de registro.",""],
+  ["Contact Rate dentro de PDT","Órdenes con un reclamo de envío antes de vencer la promesa sobre las órdenes dentro de PDT.",`${num(p.dentro.contact_orders)} / ${num(p.dentro.orders)} = ${pct(p.dentro.rate,1)}`],
+  ["Contact Rate fuera de PDT","Órdenes con un reclamo de envío después de vencida la promesa sobre las órdenes fuera de PDT.",`${num(p.fuera.contact_orders)} / ${num(p.fuera.orders)} = ${pct(p.fuera.rate,1)}`],
+  ["Razón fuera / dentro","Contact Rate fuera de PDT dividido por el de dentro. 1x: reclaman igual. Más de 1x: reclaman más las órdenes tardías, señal de problema logístico. Menos de 1x: no reclaman más.",p.ratio==null?"":`${dec(p.ratio,2)}x`]]],
+ ["Etapas de la orden",[
+  ["Etapa al momento del contacto","Estado vigente de la orden al mediodía de la fecha del caso, según el historial de estados del archivo 3. Solo los casos poscompra con orden e historial tienen etapa.",""],
+  ["% de contactos por etapa","Casos de la etapa sobre los casos con etapa identificada.",""],
+  ["Órdenes que pasaron por la etapa","Órdenes que llegaron a esa etapa o a una posterior en el recorrido.",""],
+  ["c/100 órd. (intensidad)","Casos de la etapa cada 100 órdenes que pasaron por ella. Permite comparar etapas con distinto volumen de órdenes.",""]]],
+ ["Lectura de los gráficos",[
+  ["Semana","Semana de lunes a domingo, rotulada con el lunes. La última puede estar incompleta. Órdenes en el eje izquierdo; casos transaccionales y consultivos en el derecho.",""],
+  ["Mes a mes","Resumen comparable de los indicadores por mes. Octubre es parcial (hasta el 15/10) y no es comparable con los meses cerrados.",""],
+  ["Hallazgo","Lectura automática de cada módulo con los números del período seleccionado, en un segundo nivel de lectura.",""]]]
+ ];
+ const sec=G.map(([h,items])=>`<section class="card"><h2>${h}</h2><div class="gl">${items.map(([t,d,e])=>`<div class="gt">${t}</div><div class="gd">${d}${e?`<div class="ge">${e}</div>`:""}</div>`).join("")}</div></section>`).join("");
+ return `<div class="note" style="margin:0 0 4px">Definición de cada métrica que muestra el reporte. Los ejemplos usan el período completo.</div>${sec}`;
+}
 function render(){
  tip.style.display="none";
- document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():base());
+ document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():S.tab==="glos"?glosario():base());
 }
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&(d.classList.contains("vb")||d.classList.contains("acc")))S.vb[d.dataset.k]=d.open;},true);
 const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","tooltip");document.body.appendChild(tip);
