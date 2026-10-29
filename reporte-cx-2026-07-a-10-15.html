@@ -98,12 +98,13 @@ tbody tr{border-top:1px solid var(--line)}
 .maxh{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:14px}
 .maxh th{position:sticky;top:0;background:var(--card)}
 .pdtbtn{display:flex;height:20px;padding:0;border:0;border-radius:999px;overflow:hidden;background:var(--track2);cursor:pointer;width:100%}
-.wkhit{fill:transparent;cursor:crosshair}
+.wkhit{fill:transparent;cursor:pointer}
 .wkhit:hover{fill:var(--c-pri);fill-opacity:.09}
 #tip .ids{margin-top:6px;font-size:11px;line-height:1.5;word-break:break-word;opacity:.95}
+#tip .tt{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}#tip .cp{flex:none;border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:2px 9px;font:600 11px/1.4 inherit;cursor:pointer;opacity:.9}#tip .cp:hover{opacity:1}
 #tip .tg{font-weight:600;display:inline-flex;align-items:center;gap:2px;margin-right:4px}
-#tip{max-width:320px}
-#tip{position:fixed;z-index:50;pointer-events:none;display:none;background:var(--ink);color:var(--bg);padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.55;box-shadow:0 8px 24px rgba(17,17,45,.28);max-width:240px}
+#tip{max-width:340px}
+#tip{position:fixed;z-index:50;pointer-events:auto;user-select:text;-webkit-user-select:text;cursor:text;overflow:auto;max-height:min(62vh,440px);display:none;background:var(--ink);color:var(--bg);padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.55;box-shadow:0 8px 24px rgba(17,17,45,.28);max-width:240px}
 #tip b{font-weight:600}
 #tip .k{display:flex;align-items:center;gap:8px;justify-content:space-between;gap:14px}
 #tip .k i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:-1px}
@@ -124,8 +125,8 @@ tbody tr{border-top:1px solid var(--line)}
 .insight ul{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 .insight li{margin:3px 0}
 .qbtn{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 12px/1 inherit;cursor:pointer;flex:none;padding:0}.qbtn.on{background:var(--c-pri);color:#fff;border-color:var(--c-pri)}.howto{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:11px;line-height:1.55}
-[data-hv]{cursor:default}
-.slice{cursor:default;transition:opacity .15s}
+[data-hv]{cursor:pointer}
+.slice{cursor:pointer;transition:opacity .15s}
 .slice:hover{opacity:.82}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--mute)}
 @media (max-width:600px){.wrap{padding:20px 16px 48px}.hero{padding:24px;border-radius:22px}.card{padding:18px;border-radius:18px}}
@@ -440,7 +441,7 @@ function s3(r){
  <div class="grid4" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${[["7","Recontacto 7 días",rc["7"],""],["3","Recontacto 3 días",rc["3"],"Sensibilidad"],["14","Recontacto 14 días",rc["14"],"Sensibilidad"]].map(([k,l,v,s])=>`<div class="inner" ${hv(l+" (casos recontactados)",CASES.filter(c=>inS(c)&&(c.r&RBIT[k])))} style="padding:12px;gap:2px"><div class="small mute">${l}</div><div style="font-size:24px;font-weight:600">${pct(v.rate)}</div><div class="small mute">${v.num} / ${v.den}${s?" · "+s:""}</div></div>`).join("")}</div>
  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><h3 style="font-size:15px;display:flex;align-items:center;gap:8px">Motivo x tipo de registro: casos recontactados y tasa de recontacto<button class="qbtn${S.how?" on":""}" data-act="how" aria-expanded="${!!S.how}" aria-label="Cómo leer esta tabla" title="Cómo leer esta tabla">?</button></h3>
  <div class="seg">${["3","7","14"].map(w=>`<button data-act="win" data-v="${w}" class="${S.win===w?"on":""}">${w} días</button>`).join("")}</div></div>
- ${S.how?`<div class="howto"><b>Cómo leer esta tabla.</b> Cada fila es un motivo de contacto y cada columna un tipo de registro. En cada celda, el primer número son los casos que volvieron a contactar por lo mismo dentro de ${S.win} días; el porcentaje es esa cantidad sobre todos los casos de ese motivo y tipo (el «de N» de abajo).${ex?` Ejemplo: en «${esc(ex.n)}» · ${ex.tp}, ${ex.rec} de ${ex.nn} casos (${pct(ex.rt,0)}) tuvieron un recontacto.`:""} Cuanto más oscura la celda, mayor la tasa; una tasa alta sobre pocos casos pesa menos que una baja sobre muchos. Pasá el mouse sobre una celda para ver los números de caso.</div>`:""}
+ ${S.how?`<div class="howto"><b>Cómo leer esta tabla.</b> Cada fila es un motivo de contacto y cada columna un tipo de registro. En cada celda, el primer número son los casos que volvieron a contactar por lo mismo dentro de ${S.win} días; el porcentaje es esa cantidad sobre todos los casos de ese motivo y tipo (el «de N» de abajo).${ex?` Ejemplo: en «${esc(ex.n)}» · ${ex.tp}, ${ex.rec} de ${ex.nn} casos (${pct(ex.rt,0)}) tuvieron un recontacto.`:""} Cuanto más oscura la celda, mayor la tasa; una tasa alta sobre pocos casos pesa menos que una baja sobre muchos. Hacé click en una celda para ver los números de caso.</div>`:""}
  <div class="small mute">Ventana: ${S.win} días. Cada celda: casos recontactados · tasa = recontactados / casos de ese motivo y tipo. Más oscuro = tasa más alta. Solo se muestran los motivos con al menos un recontacto${hid?` (${hid} motivos sin recontacto no se listan)`:""}.</div>
  <div class="scroll"><table style="border-collapse:separate;border-spacing:4px;min-width:640px"><thead><tr><th>Motivo</th><th>Consulta</th><th>Solicitud</th><th>Reclamo</th><th>Total motivo</th></tr></thead><tbody>
  ${names.map(n=>{const m=mat[n];return `<tr><td style="font-weight:600;padding:8px 6px">${esc(n)}</td>${cell(m.Consulta,n,"Consulta")}${cell(m.Solicitud,n,"Solicitud")}${cell(m.Reclamo,n,"Reclamo")}<td ${hv("Recontactados · "+n,recIds(n))} style="font-weight:600;padding:8px 6px">${m.total.rec} · ${pct(m.total.n?m.total.rec/m.total.n:null,0)}<div class="small mute" style="font-weight:400">de ${m.total.n}</div></td></tr>`}).join("")}
@@ -450,9 +451,8 @@ function s4(r){
  const p=r.pdt;
  const g=(key,name,when,read)=>{const x=p[key];const w=x.rate?Math.max(2,x.rate*100):0;const open=S.open[key+S.scope];
   return `<div class="inner" style="gap:6px"><div class="row"><span style="font-weight:600">${name}</span><span>${num(x.orders)} órdenes</span></div>
-  <button class="pdtbtn" data-act="open" data-v="${key}" aria-expanded="${!!open}" ${hv("Reclamos de envío · "+name,x.cases)}><span style="display:block;height:100%;width:${w}%;background:var(--c-alert)"></span></button>
-  <div class="small mute">Pasá el mouse o hacé click en la barra para ver los números de caso de los contactos (la parte naranja es el % de órdenes con reclamo; el resto son órdenes sin reclamo).</div>
-  ${open?`<div style="display:flex;flex-wrap:wrap;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px">${x.cases.length?x.cases.map(c=>`<span class="chip">${c}</span>`).join(""):'<span class="small mute">Sin casos</span>'}</div>`:""}
+  <button class="pdtbtn" ${hv("Reclamos de envío · "+name,x.cases)}><span style="display:block;height:100%;width:${w}%;background:var(--c-alert)"></span></button>
+  <div class="small mute">Hacé click en la barra para ver los números de caso de los contactos (la parte naranja es el % de órdenes con reclamo; el resto son órdenes sin reclamo).</div>
   <div class="row" style="font-size:13px"><span><b>${num(x.contact_orders)}</b> órdenes con reclamo de envío ${when}</span><span style="font-weight:600">Contact Rate ${pct(x.rate)}</span></div>
   <div class="small mute">${read}</div></div>`};
  const ratio=p.ratio==null?"n/d":dec(p.ratio,2)+"x";
@@ -621,17 +621,17 @@ function glosario(){
  return `<div class="note" style="margin:0 0 4px">Definición de cada métrica que muestra el reporte. Los ejemplos usan el período completo.</div>${sec}`;
 }
 function render(){
- tip.style.display="none";
+ hideTip();
  document.getElementById("app").innerHTML=header()+(S.tab==="kpi"?kpi():S.tab==="glos"?glosario():base());
 }
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&(d.classList.contains("vb")||d.classList.contains("acc")))S.vb[d.dataset.k]=d.open;},true);
 const tip=document.createElement("div");tip.id="tip";tip.setAttribute("role","tooltip");document.body.appendChild(tip);
-const LIM=24;
-const idList=a=>a.slice(0,LIM).join(", ")+(a.length>LIM?` … +${a.length-LIM} más`:"");
+const idList=a=>a.join(", ");
 function weekTip(i){
  const w=X.weekly,last=i===w.labels.length-1;
  const tx=CASES.filter(c=>c.w===i&&isTx(c)).map(c=>c.id), cs=CASES.filter(c=>c.w===i&&c.k==="C").map(c=>c.id);
- return `<b>Semana del ${w.labels[i]}${last?" · incompleta":""}</b>
+ tip._ids=[...tx,...cs];
+ return `<div class="tt"><b>Semana del ${w.labels[i]}${last?" · incompleta":""}</b>${tip._ids.length?'<button class="cp" type="button">Copiar IDs</button>':""}</div>
  <div class="k"><span><i style="background:var(--c-grey)"></i>Órdenes</span><b>${num(w.orders[i])}</b></div>
  <div class="k"><span><i style="background:var(--c-pri)"></i>Casos transaccionales</span><b>${num(tx.length)}</b></div>
  <div class="ids">${tx.length?idList(tx):"—"}</div>
@@ -640,16 +640,17 @@ function weekTip(i){
 }
 function idTip(el){
  const ids=el.dataset.ids?el.dataset.ids.split(","):[];
+ tip._ids=ids;
  const by={Consulta:[],Solicitud:[],Reclamo:[]};
  ids.forEach(id=>{const c=CMAP[id];if(c)by[c.t].push(id);});
- let h=`<b>${esc(el.dataset.ttl)}</b><div class="k"><span>${num(ids.length)} ${ids.length===1?"caso":"casos"}</span></div>`;
+ let h=`<div class="tt"><b>${esc(el.dataset.ttl)}</b>${ids.length?'<button class="cp" type="button">Copiar IDs</button>':""}</div><div class="k"><span>${num(ids.length)} ${ids.length===1?"caso":"casos"}</span></div>`;
  TIPOS.forEach(tp=>{if(by[tp].length)h+=`<div class="ids"><span class="tg"><i style="background:${TCOL[tp]}"></i>${tp} (${by[tp].length})</span> ${idList(by[tp])}</div>`;});
  return h;
 }
-function showTip(e){
- const el=e.target.closest&&e.target.closest("[data-hv],.wkhit");
- if(!el){tip.style.display="none";return;}
+function hideTip(){tip.style.display="none";tip._el=null;}
+function showTip(e,el){
  tip.innerHTML=el.classList.contains("wkhit")?weekTip(+el.dataset.wk):idTip(el);
+ tip._el=el;tip.scrollTop=0;
  tip.style.display="block";
  const r=tip.getBoundingClientRect();
  let x=e.clientX+14,y=e.clientY-r.height-10;
@@ -658,9 +659,21 @@ function showTip(e){
  if(y+r.height>window.innerHeight-8)y=Math.max(8,window.innerHeight-r.height-8);
  tip.style.left=Math.max(8,x)+"px";tip.style.top=y+"px";
 }
-document.addEventListener("pointermove",showTip);
-document.addEventListener("pointerdown",showTip);
-document.addEventListener("pointerout",e=>{if(!e.relatedTarget)tip.style.display="none";});
+function copyIds(btn){
+ const txt=(tip._ids||[]).join(", ");
+ const done=()=>{btn.textContent="Copiado";setTimeout(()=>{if(btn.isConnected)btn.textContent="Copiar IDs";},1400)};
+ const fb=()=>{try{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();done();}catch(_){}};
+ try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,fb);else fb();}catch(_){fb();}
+}
+// el tooltip se abre con click sobre un gráfico, queda fijo (se puede copiar) y se cierra al hacer click fuera, con Esc o al cambiar la vista
+document.addEventListener("click",e=>{
+ if(tip.contains(e.target)){const b=e.target.closest(".cp");if(b)copyIds(b);return;}
+ const el=e.target.closest&&e.target.closest("[data-hv],.wkhit");
+ if(!el||tip._el===el){hideTip();return;}
+ showTip(e,el);
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")hideTip();});
+window.addEventListener("scroll",hideTip,{passive:true});
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-act]");if(!b)return;
  const a=b.dataset.act,v=b.dataset.v,y=window.scrollY;
